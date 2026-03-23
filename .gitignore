@@ -1,0 +1,8 @@
+# Base SQLite local (se regenera al ejecutar la app)
+/data/*.sqlite
+/data/*.sqlite-journal
+/data/*.sqlite-wal
+/data/*.sqlite-shm
+
+# Respaldo local opcional
+/backups/
