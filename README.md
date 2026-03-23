@@ -1,14 +1,14 @@
-# Sistema Veterinaria — modo local (SQLite)
+﻿# Sistema Veterinaria — modo local (SQLite)
 
-Este proyecto funciona **sin MySQL ni hosting en la nube**: usa **PHP** y una base **SQLite** en la carpeta `data/` (archivo `veterinaria.sqlite`), que se crea sola al usar cualquier página que conecte a la base.
+Este proyecto funciona **sin MySQL ni hosting en la nube**: usa **PHP** y una base **SQLite** en la carpeta `data/` (archivo `veterinaria.sqlite`), que se crea sola al usar cualquier pagina que conecte a la base.
 
 ## Requisitos
 
-- PHP **8.0+** con extensión **pdo_sqlite** habilitada.
+- PHP **8.0+** con extension **pdo_sqlite** habilitada.
 
-## Cómo probar en tu PC
+## Como probar en tu PC
 
-En la raíz del proyecto:
+En la raiz del proyecto:
 
 ```bash
 php -S localhost:8080
@@ -16,25 +16,42 @@ php -S localhost:8080
 
 Abre en el navegador: `http://localhost:8080/login.html` (o `index.php`).
 
-### Usuarios de demostración
+### Usuarios de demostracion
 
-Tras la primera ejecución se crean automáticamente:
+Tras la primera ejecucion se crean automaticamente:
 
-| Correo              | Contraseña | Rol           |
+| Correo              | Contrasena | Rol           |
 |---------------------|------------|---------------|
 | admin@demo.local    | admin123   | Administrador |
 | empleado@demo.local | admin123   | Empleado      |
 
-## GitHub y demo online
+## Demo en GitHub Pages (sin PHP)
 
-- **GitHub Pages solo sirve archivos estáticos**; **no ejecuta PHP**, así que esta app **no puede “correr” tal cual en Pages**.
-- Para una demo pública necesitas un servicio con PHP (por ejemplo **Render**, **Railway**, **000webhost**, **InfinityFree**) o probar con **GitHub Codespaces** / tu máquina con `php -S`.
+Se agrego una demo estatica en `docs/` para que puedas mostrar el flujo en GitHub Pages.
 
-Cuando quieras subir el repo a GitHub, este `README` y `.gitignore` ya dejan lista la base local ignorada para no subir datos personales.
+### Activacion
+
+1. Ve al repo en GitHub: `Settings` -> `Pages`.
+2. En `Build and deployment`, selecciona:
+   - `Source`: **Deploy from a branch**
+   - `Branch`: **main**
+   - `Folder`: **/docs**
+3. Guarda y espera 1-2 minutos.
+
+La URL quedara asi:
+
+`https://fernandonotnull555-dev.github.io/SistemaVet/`
+
+> Nota: Esta demo Pages guarda datos en `localStorage` del navegador. No usa PHP/SQLite.
+
+## GitHub y demo online completa
+
+- GitHub Pages solo sirve archivos estaticos; no ejecuta PHP.
+- Para la app completa (PHP + SQLite), usa tu PC con `php -S` o un hosting que soporte PHP.
 
 ## Respaldo
 
-`backup.php` ahora genera una copia del archivo SQLite en la carpeta `backups/` (junto al proyecto). El respaldo anterior con **mysqldump** quedó comentado dentro del mismo archivo por si lo necesitas como referencia.
+`backup.php` genera una copia del archivo SQLite en la carpeta `backups/`.
 
 ## Nota sobre `agrovet.sql`
 

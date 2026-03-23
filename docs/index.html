@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Vet - Demo GitHub Pages</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Sistema Veterinaria - Demo</h1>
+    <p>Version estatica para GitHub Pages (sin PHP).</p>
+  </header>
+
+  <main class="card" id="loginCard">
+    <h2>Iniciar sesion</h2>
+    <form id="loginForm">
+      <label for="correo">Correo</label>
+      <input id="correo" type="email" required />
+      <label for="contrasena">Contrasena</label>
+      <input id="contrasena" type="password" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <small>Demo: admin@demo.local / admin123</small>
+  </main>
+
+  <main class="card hidden" id="appCard">
+    <div class="topbar">
+      <strong id="welcome"></strong>
+      <button id="logoutBtn" class="secondary">Cerrar sesion</button>
+    </div>
+
+    <nav>
+      <button class="tab active" data-tab="productos">Productos</button>
+      <button class="tab" data-tab="pacientes">Pacientes</button>
+      <button class="tab" data-tab="citas">Citas</button>
+    </nav>
+
+    <section id="productos" class="panel active">
+      <h3>Productos</h3>
+      <div class="row">
+        <input id="p_nombre" placeholder="Nombre" />
+        <input id="p_desc" placeholder="Descripcion" />
+        <input id="p_precio" type="number" step="0.01" placeholder="Precio" />
+        <input id="p_cant" type="number" placeholder="Cantidad" />
+        <button id="addProducto">Agregar</button>
+      </div>
+      <div class="row">
+        <input id="buscarProductoId" type="number" placeholder="Buscar por ID" />
+        <button id="buscarProducto">Buscar</button>
+        <button id="listarProducto" class="secondary">Mostrar todo</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Nombre</th><th>Descripcion</th><th>Precio</th><th>Cantidad</th></tr></thead>
+        <tbody id="productosBody"></tbody>
+      </table>
+    </section>
+
+    <section id="pacientes" class="panel">
+      <h3>Pacientes</h3>
+      <div class="row">
+        <input id="pa_nombre" placeholder="Nombre" />
+        <input id="pa_especie" placeholder="Especie" />
+        <input id="pa_sexo" placeholder="Sexo" />
+        <button id="addPaciente">Agregar</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Nombre</th><th>Especie</th><th>Sexo</th></tr></thead>
+        <tbody id="pacientesBody"></tbody>
+      </table>
+    </section>
+
+    <section id="citas" class="panel">
+      <h3>Citas</h3>
+      <div class="row">
+        <input id="c_paciente" type="number" placeholder="ID Paciente" />
+        <input id="c_fecha" placeholder="Fecha" />
+        <input id="c_motivo" placeholder="Motivo" />
+        <button id="addCita">Agregar</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>ID Paciente</th><th>Fecha</th><th>Motivo</th></tr></thead>
+        <tbody id="citasBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
