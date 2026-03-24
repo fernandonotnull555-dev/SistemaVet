@@ -775,20 +775,15 @@
         workspace(
           '<h2>Generar Reportes</h2>' +
             '<div class="stack-btns">' +
-            '<button type="button" id="rep_imp">Generar reporte impreso</button>' +
-            '<button type="button" id="rep_pant">Generar Reporte en pantalla</button>' +
-            '<button type="button" id="rep_back">Generar Copia de Respaldo</button>' +
+            '<button type="button" data-go="rep-usuarios">Reporte Usuarios</button>' +
+            '<button type="button" data-go="rep-productos">Reporte Productos</button>' +
+            '<button type="button" data-go="rep-pacientes">Reporte Pacientes</button>' +
+            '<button type="button" data-go="rep-propietarios">Reporte Propietarios</button>' +
+            '<button type="button" data-go="rep-citas">Reporte Citas</button>' +
+            '<button type="button" id="rep_back">Descargar Respaldo JSON</button>' +
             '<button type="button" class="secondary" data-go="admin-inicio">Regresar al menú</button>' +
-            '</div><div id="rep_out"></div>'
+            '</div>'
         );
-        $('rep_imp').onclick = () => alert('En el sistema PHP original esto abre PDF (Dompdf). En Pages usa la app completa en tu PC.');
-        $('rep_pant').onclick = () => {
-          let html = '<h3>Vista en pantalla (resumen)</h3>';
-          html += '<h4>Usuarios</h4>' + tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], state.users.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
-          html += '<h4>Productos</h4>' + tableHtml(['ID', 'Nombre', 'Desc', 'Precio', 'Cant.'], state.productos.map((p) => [p.id, p.nombre, p.descripcion, p.precio, p.cantidad_exist]));
-          html += '<h4>Pacientes</h4>' + tableHtml(['ID', 'ID prop', 'Nombre', 'Especie'], state.pacientes.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie]));
-          $('rep_out').innerHTML = html;
-        };
         $('rep_back').onclick = () => {
           const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
           const a = document.createElement('a');
@@ -797,6 +792,99 @@
           a.click();
           URL.revokeObjectURL(a.href);
         };
+        break;
+
+      case 'rep-usuarios':
+        workspace(
+          '<h2>Reporte: Usuarios (' + state.users.length + ' registros)</h2>' +
+            '<div class="form-grid"><label>Buscar por nombre o correo<input id="rep_u_search" type="text" placeholder="Ej: admin, demo@" /></label></div>' +
+            '<div id="rep_u_out"></div>' +
+            backBtnAdmin()
+        );
+        const renderUsers = () => {
+          const term = ($('rep_u_search').value || '').toLowerCase();
+          let list = state.users;
+          if (term) list = list.filter((u) => u.nombre_completo.toLowerCase().includes(term) || u.correo_electronico.toLowerCase().includes(term));
+          $('rep_u_out').innerHTML = tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], list.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
+        };
+        renderUsers();
+        $('rep_u_search').oninput = renderUsers;
+        break;
+
+      case 'rep-productos':
+        workspace(
+          '<h2>Reporte: Productos (' + state.productos.length + ' registros)</h2>' +
+            '<div class="form-grid"><label>Buscar por nombre o descripción<input id="rep_p_search" type="text" placeholder="Ej: alimento, vitamina" /></label></div>' +
+            '<div id="rep_p_out"></div>' +
+            backBtnAdmin()
+        );
+        const renderProds = () => {
+          const term = ($('rep_p_search').value || '').toLowerCase();
+          let list = state.productos;
+          if (term) list = list.filter((p) => p.nombre.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term));
+          $('rep_p_out').innerHTML = tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], list.map((p) => [p.id, p.nombre, p.descripcion, '$' + p.precio.toFixed(2), p.cantidad_exist]));
+        };
+        renderProds();
+        $('rep_p_search').oninput = renderProds;
+        break;
+
+      case 'rep-pacientes':
+        workspace(
+          '<h2>Reporte: Pacientes (' + state.pacientes.length + ' registros)</h2>' +
+            '<div class="form-grid"><label>Buscar por nombre<input id="rep_pa_search" type="text" placeholder="Ej: Max, Luna" /></label>' +
+            '<label>Filtrar por especie<select id="rep_pa_especie"><option value="">-- Todas --</option><option>Canino</option><option>Felino</option></select></label></div>' +
+            '<div id="rep_pa_out"></div>' +
+            backBtnAdmin()
+        );
+        const renderPacs = () => {
+          const term = ($('rep_pa_search').value || '').toLowerCase();
+          const especie = $('rep_pa_especie').value;
+          let list = state.pacientes;
+          if (term) list = list.filter((p) => p.Nombre.toLowerCase().includes(term));
+          if (especie) list = list.filter((p) => p.Especie === especie);
+          $('rep_pa_out').innerHTML = tableHtml(['ID', 'Prop', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], list.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]));
+        };
+        renderPacs();
+        $('rep_pa_search').oninput = renderPacs;
+        $('rep_pa_especie').onchange = renderPacs;
+        break;
+
+      case 'rep-propietarios':
+        workspace(
+          '<h2>Reporte: Propietarios (' + state.propietarios.length + ' registros)</h2>' +
+            '<div class="form-grid"><label>Buscar por nombre o teléfono<input id="rep_pr_search" type="text" placeholder="Ej: Juan, 8888" /></label></div>' +
+            '<div id="rep_pr_out"></div>' +
+            backBtnAdmin()
+        );
+        const renderProps = () => {
+          const term = ($('rep_pr_search').value || '').toLowerCase();
+          let list = state.propietarios;
+          if (term) list = list.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(term) || pr.telefono.includes(term) || pr.correo_electronico.toLowerCase().includes(term));
+          $('rep_pr_out').innerHTML = tableHtml(['ID Prop', 'Nombre', 'Teléfono', 'Correo'], list.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]));
+        };
+        renderProps();
+        $('rep_pr_search').oninput = renderProps;
+        break;
+
+      case 'rep-citas':
+        workspace(
+          '<h2>Reporte: Citas (' + state.citas.length + ' registros)</h2>' +
+            '<div class="form-grid"><label>Buscar por motivo<input id="rep_c_search" type="text" placeholder="Ej: Vacunación, Castración" /></label>' +
+            '<label>Filtrar por fecha (desde)<input id="rep_c_fecha" type="date" /></label></div>' +
+            '<div id="rep_c_out"></div>' +
+            backBtnAdmin()
+        );
+        const renderCitas = () => {
+          const term = ($('rep_c_search').value || '').toLowerCase();
+          const fecha = ($('rep_c_fecha').value || '');
+          let list = state.citas;
+          if (term) list = list.filter((ct) => ct.motivo.toLowerCase().includes(term));
+          if (fecha) list = list.filter((ct) => ct.fecha_cita.startsWith(fecha));
+          $('rep_c_out').innerHTML = tableHtml(['ID', 'ID Paciente', 'Fecha', 'Motivo'], list.map((ct) => [ct.id_cita, ct.id_paciente, ct.fecha_cita, ct.motivo]));
+        };
+        renderCitas();
+        $('rep_c_search').oninput = renderCitas;
+        $('rep_c_fecha').onchange = renderCitas;
         break;
 
       /* ——— Empleado (pantallas equivalentes a empleado_*.html) ——— */
