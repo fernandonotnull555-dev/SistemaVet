@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'vet_demo_data_v2';
+  const STORAGE_KEY = 'vet_demo_data_v3';
 
   const IMG_HINT =
     '';
