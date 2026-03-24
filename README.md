@@ -41,6 +41,18 @@ La demo incluye **170+ registros precargados** para demostración realista:
 
 Estos datos se guardan en **localStorage** del navegador (sin persistencia real). Perfectos para hacer búsquedas, reportes y probar toda la funcionalidad de la interfaz con volumen suficiente de datos.
 
+### Reportes en Pantalla
+
+Los reportes ahora **muestran TODOS los registros** con búsqueda y filtrado en tiempo real:
+
+- **Reporte Usuarios**: Busca por nombre o correo
+- **Reporte Productos**: Busca por nombre o descripción  
+- **Reporte Pacientes**: Busca por nombre, filtra por especie (Canino/Felino)
+- **Reporte Propietarios**: Busca por nombre, teléfono o correo
+- **Reporte Citas**: Busca por motivo, filtra por rango de fechas
+
+Acceso: **Menú Admin → Generar Reportes → Selecciona el reporte**
+
 ### Activacion
 
 1. Ve al repo en GitHub: `Settings` -> `Pages`.
