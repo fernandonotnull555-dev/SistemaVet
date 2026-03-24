@@ -29,6 +29,18 @@ Tras la primera ejecucion se crean automaticamente:
 
 Se agrego una demo estatica en `docs/` para que puedas mostrar el flujo en GitHub Pages.
 
+### Datos de ejemplo en la demo
+
+La demo incluye **50+ registros precargados** para demostración:
+
+- **5 usuarios**: Administrador + 4 empleados
+- **15 productos**: Alimentos, medicinas, accesorios y servicios veterinarios
+- **20 pacientes**: Perros y gatos con datos completos
+- **15 propietarios**: Clientes con información de contacto
+- **15 citas**: Registros de atención médica
+
+Estos datos se guardan en **localStorage** del navegador (sin persistencia real). Perfectos para probar toda la funcionalidad de la interfaz.
+
 ### Activacion
 
 1. Ve al repo en GitHub: `Settings` -> `Pages`.
