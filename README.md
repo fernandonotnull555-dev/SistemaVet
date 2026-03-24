@@ -31,15 +31,15 @@ Se agrego una demo estatica en `docs/` para que puedas mostrar el flujo en GitHu
 
 ### Datos de ejemplo en la demo
 
-La demo incluye **50+ registros precargados** para demostración:
+La demo incluye **170+ registros precargados** para demostración realista:
 
-- **5 usuarios**: Administrador + 4 empleados
-- **15 productos**: Alimentos, medicinas, accesorios y servicios veterinarios
-- **20 pacientes**: Perros y gatos con datos completos
-- **15 propietarios**: Clientes con información de contacto
-- **15 citas**: Registros de atención médica
+- **10 usuarios**: Administrador + 9 empleados diferentes
+- **30 productos**: Alimentos premium, medicinas, vitaminas, accesorios y servicios veterinarios completos
+- **50 pacientes**: Perros y gatos con datos realistas y variados
+- **30 propietarios**: Clientes con información de contacto completa
+- **50 citas**: Registros de atenciones médicas distribuidas en abril-mayo
 
-Estos datos se guardan en **localStorage** del navegador (sin persistencia real). Perfectos para probar toda la funcionalidad de la interfaz.
+Estos datos se guardan en **localStorage** del navegador (sin persistencia real). Perfectos para hacer búsquedas, reportes y probar toda la funcionalidad de la interfaz con volumen suficiente de datos.
 
 ### Activacion
 
