@@ -775,6 +775,7 @@
         workspace(
           '<h2>Generar Reportes</h2>' +
             '<div class="stack-btns">' +
+            '<button type="button" data-go="rep-general" style="background:#0d47a1;font-weight:bold;">📊 REPORTE GENERAL (Todos los datos)</button>' +
             '<button type="button" data-go="rep-usuarios">Reporte Usuarios</button>' +
             '<button type="button" data-go="rep-productos">Reporte Productos</button>' +
             '<button type="button" data-go="rep-pacientes">Reporte Pacientes</button>' +
@@ -794,10 +795,62 @@
         };
         break;
 
+      case 'rep-general':
+        const genCSV = (name, headers, rows) => {
+          let csv = headers.join(',') + '\n';
+          rows.forEach(r => csv += r.map(c => (String(c).includes(',') ? '"' + c + '"' : c)).join(',') + '\n');
+          return csv;
+        };
+        const printReport = (title, html) => {
+          const w = window.open('', '', 'width=900,height=600');
+          w.document.write('<html><head><title>' + title + '</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
+          w.document.close();
+          w.print();
+        };
+        const downloadCSV = (filename, csv) => {
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        };
+        let genHtml = '<h2>📊 REPORTE GENERAL - ' + new Date().toLocaleDateString() + '</h2>';
+        genHtml += '<h3>Usuarios (' + state.users.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], state.users.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
+        genHtml += '<h3>Productos (' + state.productos.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Precio', 'Cantidad'], state.productos.map((p) => [p.id, p.nombre, '$' + p.precio.toFixed(2), p.cantidad_exist]));
+        genHtml += '<h3>Pacientes (' + state.pacientes.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Especie', 'Propietario'], state.pacientes.map((p) => [p.id_paciente, p.Nombre, p.Especie, p.id_prop]));
+        genHtml += '<h3>Propietarios (' + state.propietarios.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Teléfono', 'Correo'], state.propietarios.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]));
+        genHtml += '<h3>Citas (' + state.citas.length + ' registros)</h3>' + tableHtml(['ID', 'Paciente', 'Fecha', 'Motivo'], state.citas.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]));
+        workspace(
+          '<h2>📊 Reporte General Completo</h2>' +
+            '<div class="stack-btns">' +
+            '<button type="button" class="action" id="btn_gen_print">🖨️ Imprimir/Vista Previa</button>' +
+            '<button type="button" class="action" id="btn_gen_csv">📥 Descargar Excel (CSV)</button>' +
+            '<button type="button" class="secondary" data-go="admin-submenu-reportes">Volver a reportes</button>' +
+            '</div>' +
+            '<div id="rep_gen_out" style="margin-top:20px;"></div>'
+        );
+        $('rep_gen_out').innerHTML = genHtml;
+        $('btn_gen_print').onclick = () => printReport('Reporte General', genHtml);
+        $('btn_gen_csv').onclick = () => {
+          let allCSV = '';
+          allCSV += 'USUARIOS\n' + genCSV('Usuarios', ['ID', 'Nombre', 'Correo', 'Rol'], state.users.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario])) + '\n\n';
+          allCSV += 'PRODUCTOS\n' + genCSV('Productos', ['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], state.productos.map((p) => [p.id, p.nombre, p.descripcion, p.precio, p.cantidad_exist])) + '\n\n';
+          allCSV += 'PACIENTES\n' + genCSV('Pacientes', ['ID', 'Nombre', 'Especie', 'Propietario'], state.pacientes.map((p) => [p.id_paciente, p.Nombre, p.Especie, p.id_prop])) + '\n\n';
+          allCSV += 'PROPIETARIOS\n' + genCSV('Propietarios', ['ID', 'Nombre', 'Teléfono', 'Correo'], state.propietarios.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico])) + '\n\n';
+          allCSV += 'CITAS\n' + genCSV('Citas', ['ID', 'ID Paciente', 'Fecha', 'Motivo'], state.citas.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]));
+          downloadCSV('Reporte_General_' + new Date().toISOString().split('T')[0] + '.csv', allCSV);
+        };
+        break;
+
       case 'rep-usuarios':
         workspace(
           '<h2>Reporte: Usuarios (' + state.users.length + ' registros)</h2>' +
             '<div class="form-grid"><label>Buscar por nombre o correo<input id="rep_u_search" type="text" placeholder="Ej: admin, demo@" /></label></div>' +
+            '<div class="stack-btns">' +
+            '<button type="button" class="action" id="btn_u_print">🖨️ Imprimir</button>' +
+            '<button type="button" class="action" id="btn_u_csv">📥 Descargar CSV</button>' +
+            '</div>' +
             '<div id="rep_u_out"></div>' +
             backBtnAdmin()
         );
@@ -809,12 +862,39 @@
         };
         renderUsers();
         $('rep_u_search').oninput = renderUsers;
+        $('btn_u_print').onclick = () => {
+          const term = ($('rep_u_search').value || '').toLowerCase();
+          let list = state.users;
+          if (term) list = list.filter((u) => u.nombre_completo.toLowerCase().includes(term) || u.correo_electronico.toLowerCase().includes(term));
+          const html = '<h2>Reporte Usuarios</h2>' + tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], list.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
+          const w = window.open('', '', 'width=900,height=600');
+          w.document.write('<html><head><title>Reporte Usuarios</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
+          w.document.close();
+          w.print();
+        };
+        $('btn_u_csv').onclick = () => {
+          const term = ($('rep_u_search').value || '').toLowerCase();
+          let list = state.users;
+          if (term) list = list.filter((u) => u.nombre_completo.toLowerCase().includes(term) || u.correo_electronico.toLowerCase().includes(term));
+          let csv = 'ID,Nombre,Correo,Rol\n';
+          list.forEach(u => csv += u.id_usuario + ',' + u.nombre_completo + ',' + u.correo_electronico + ',' + u.rol_usuario + '\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Usuarios_' + new Date().toISOString().split('T')[0] + '.csv';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        };
         break;
 
       case 'rep-productos':
         workspace(
           '<h2>Reporte: Productos (' + state.productos.length + ' registros)</h2>' +
             '<div class="form-grid"><label>Buscar por nombre o descripción<input id="rep_p_search" type="text" placeholder="Ej: alimento, vitamina" /></label></div>' +
+            '<div class="stack-btns">' +
+            '<button type="button" class="action" id="btn_p_print">🖨️ Imprimir</button>' +
+            '<button type="button" class="action" id="btn_p_csv">📥 Descargar CSV</button>' +
+            '</div>' +
             '<div id="rep_p_out"></div>' +
             backBtnAdmin()
         );
@@ -826,6 +906,29 @@
         };
         renderProds();
         $('rep_p_search').oninput = renderProds;
+        $('btn_p_print').onclick = () => {
+          const term = ($('rep_p_search').value || '').toLowerCase();
+          let list = state.productos;
+          if (term) list = list.filter((p) => p.nombre.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term));
+          const html = '<h2>Reporte Productos</h2>' + tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], list.map((p) => [p.id, p.nombre, p.descripcion, '$' + p.precio.toFixed(2), p.cantidad_exist]));
+          const w = window.open('', '', 'width=900,height=600');
+          w.document.write('<html><head><title>Reporte Productos</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
+          w.document.close();
+          w.print();
+        };
+        $('btn_p_csv').onclick = () => {
+          const term = ($('rep_p_search').value || '').toLowerCase();
+          let list = state.productos;
+          if (term) list = list.filter((p) => p.nombre.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term));
+          let csv = 'ID,Nombre,Descripción,Precio,Cantidad\n';
+          list.forEach(p => csv += p.id + ',' + p.nombre + ',' + p.descripcion + ',' + p.precio + ',' + p.cantidad_exist + '\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Productos_' + new Date().toISOString().split('T')[0] + '.csv';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        };
         break;
 
       case 'rep-pacientes':
@@ -833,6 +936,10 @@
           '<h2>Reporte: Pacientes (' + state.pacientes.length + ' registros)</h2>' +
             '<div class="form-grid"><label>Buscar por nombre<input id="rep_pa_search" type="text" placeholder="Ej: Max, Luna" /></label>' +
             '<label>Filtrar por especie<select id="rep_pa_especie"><option value="">-- Todas --</option><option>Canino</option><option>Felino</option></select></label></div>' +
+            '<div class="stack-btns">' +
+            '<button type="button" class="action" id="btn_pa_print">🖨️ Imprimir</button>' +
+            '<button type="button" class="action" id="btn_pa_csv">📥 Descargar CSV</button>' +
+            '</div>' +
             '<div id="rep_pa_out"></div>' +
             backBtnAdmin()
         );
@@ -847,12 +954,43 @@
         renderPacs();
         $('rep_pa_search').oninput = renderPacs;
         $('rep_pa_especie').onchange = renderPacs;
+        $('btn_pa_print').onclick = () => {
+          const term = ($('rep_pa_search').value || '').toLowerCase();
+          const especie = $('rep_pa_especie').value;
+          let list = state.pacientes;
+          if (term) list = list.filter((p) => p.Nombre.toLowerCase().includes(term));
+          if (especie) list = list.filter((p) => p.Especie === especie);
+          const html = '<h2>Reporte Pacientes</h2>' + tableHtml(['ID', 'Prop', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], list.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]));
+          const w = window.open('', '', 'width=900,height=600');
+          w.document.write('<html><head><title>Reporte Pacientes</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
+          w.document.close();
+          w.print();
+        };
+        $('btn_pa_csv').onclick = () => {
+          const term = ($('rep_pa_search').value || '').toLowerCase();
+          const especie = $('rep_pa_especie').value;
+          let list = state.pacientes;
+          if (term) list = list.filter((p) => p.Nombre.toLowerCase().includes(term));
+          if (especie) list = list.filter((p) => p.Especie === especie);
+          let csv = 'ID,ID_Prop,Nombre,Especie,Sexo,Peso,Edad\n';
+          list.forEach(p => csv += p.id_paciente + ',' + p.id_prop + ',' + p.Nombre + ',' + p.Especie + ',' + p.Sexo + ',' + p.Peso + ',' + p.Edad + '\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Pacientes_' + new Date().toISOString().split('T')[0] + '.csv';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        };
         break;
 
       case 'rep-propietarios':
         workspace(
           '<h2>Reporte: Propietarios (' + state.propietarios.length + ' registros)</h2>' +
             '<div class="form-grid"><label>Buscar por nombre o teléfono<input id="rep_pr_search" type="text" placeholder="Ej: Juan, 8888" /></label></div>' +
+            '<div class="stack-btns">' +
+            '<button type="button" class="action" id="btn_pr_print">🖨️ Imprimir</button>' +
+            '<button type="button" class="action" id="btn_pr_csv">📥 Descargar CSV</button>' +
+            '</div>' +
             '<div id="rep_pr_out"></div>' +
             backBtnAdmin()
         );
@@ -864,6 +1002,29 @@
         };
         renderProps();
         $('rep_pr_search').oninput = renderProps;
+        $('btn_pr_print').onclick = () => {
+          const term = ($('rep_pr_search').value || '').toLowerCase();
+          let list = state.propietarios;
+          if (term) list = list.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(term) || pr.telefono.includes(term) || pr.correo_electronico.toLowerCase().includes(term));
+          const html = '<h2>Reporte Propietarios</h2>' + tableHtml(['ID Prop', 'Nombre', 'Teléfono', 'Correo'], list.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]));
+          const w = window.open('', '', 'width=900,height=600');
+          w.document.write('<html><head><title>Reporte Propietarios</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
+          w.document.close();
+          w.print();
+        };
+        $('btn_pr_csv').onclick = () => {
+          const term = ($('rep_pr_search').value || '').toLowerCase();
+          let list = state.propietarios;
+          if (term) list = list.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(term) || pr.telefono.includes(term) || pr.correo_electronico.toLowerCase().includes(term));
+          let csv = 'ID,Nombre,Teléfono,Correo\n';
+          list.forEach(pr => csv += pr.id_prop + ',' + pr.Nombre_Completo + ',' + pr.telefono + ',' + pr.correo_electronico + '\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Propietarios_' + new Date().toISOString().split('T')[0] + '.csv';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        };
         break;
 
       case 'rep-citas':
@@ -871,6 +1032,10 @@
           '<h2>Reporte: Citas (' + state.citas.length + ' registros)</h2>' +
             '<div class="form-grid"><label>Buscar por motivo<input id="rep_c_search" type="text" placeholder="Ej: Vacunación, Castración" /></label>' +
             '<label>Filtrar por fecha (desde)<input id="rep_c_fecha" type="date" /></label></div>' +
+            '<div class="stack-btns">' +
+            '<button type="button" class="action" id="btn_c_print">🖨️ Imprimir</button>' +
+            '<button type="button" class="action" id="btn_c_csv">📥 Descargar CSV</button>' +
+            '</div>' +
             '<div id="rep_c_out"></div>' +
             backBtnAdmin()
         );
@@ -885,6 +1050,33 @@
         renderCitas();
         $('rep_c_search').oninput = renderCitas;
         $('rep_c_fecha').onchange = renderCitas;
+        $('btn_c_print').onclick = () => {
+          const term = ($('rep_c_search').value || '').toLowerCase();
+          const fecha = ($('rep_c_fecha').value || '');
+          let list = state.citas;
+          if (term) list = list.filter((ct) => ct.motivo.toLowerCase().includes(term));
+          if (fecha) list = list.filter((ct) => ct.fecha_cita.startsWith(fecha));
+          const html = '<h2>Reporte Citas</h2>' + tableHtml(['ID', 'ID Paciente', 'Fecha', 'Motivo'], list.map((ct) => [ct.id_cita, ct.id_paciente, ct.fecha_cita, ct.motivo]));
+          const w = window.open('', '', 'width=900,height=600');
+          w.document.write('<html><head><title>Reporte Citas</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
+          w.document.close();
+          w.print();
+        };
+        $('btn_c_csv').onclick = () => {
+          const term = ($('rep_c_search').value || '').toLowerCase();
+          const fecha = ($('rep_c_fecha').value || '');
+          let list = state.citas;
+          if (term) list = list.filter((ct) => ct.motivo.toLowerCase().includes(term));
+          if (fecha) list = list.filter((ct) => ct.fecha_cita.startsWith(fecha));
+          let csv = 'ID,ID_Paciente,Fecha,Motivo\n';
+          list.forEach(ct => csv += ct.id_cita + ',' + ct.id_paciente + ',' + ct.fecha_cita + ',' + ct.motivo + '\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Citas_' + new Date().toISOString().split('T')[0] + '.csv';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        };
         break;
 
       /* ——— Empleado (pantallas equivalentes a empleado_*.html) ——— */
