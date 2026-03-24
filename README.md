@@ -56,3 +56,7 @@ La URL quedara asi:
 ## Nota sobre `agrovet.sql`
 
 Ese archivo corresponde a otro esquema (tablas/columnas distintas). El sistema usa el esquema definido en `includes/db.php`, alineado con los `.php` del proyecto.
+
+---
+
+© 2026 Fernando — All rights reserved.

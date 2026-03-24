@@ -8,7 +8,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #e6f9e6;
+  background-color: #e3f2fd;
   color: #1e1e1e;
 }
 
@@ -28,7 +28,7 @@ body {
 
 #loginCard h2 {
   text-align: center;
-  color: #4caf50;
+  color: #1976d2;
 }
 
 #loginCard label {
@@ -40,7 +40,7 @@ body {
   width: 100%;
   box-sizing: border-box;
   padding: 10px;
-  border: 1px solid #4caf50;
+  border: 1px solid #1976d2;
   border-radius: 4px;
 }
 
@@ -48,7 +48,7 @@ body {
   margin-top: 16px;
   width: 100%;
   padding: 10px;
-  background: #4caf50;
+  background: #1976d2;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -71,7 +71,7 @@ body {
 }
 
 .demo-header {
-  background-color: rgba(92, 175, 76, 0.8);
+  background-color: rgba(25, 118, 210, 0.9);
   padding: 15px 20px;
   text-align: center;
   color: #fff;
@@ -147,7 +147,7 @@ body {
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  background: #4caf50;
+  background: #1976d2;
   color: #fff;
   cursor: pointer;
   width: 100%;
@@ -155,7 +155,7 @@ body {
 }
 
 .stack-btns button:hover {
-  background: #388e3c;
+  background: #1565c0;
 }
 
 .stack-btns button.secondary {
@@ -186,7 +186,7 @@ body {
 .form-grid button.action {
   margin-top: 14px;
   padding: 10px 16px;
-  background: #4caf50;
+  background: #1976d2;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -197,7 +197,7 @@ body {
   margin-top: 12px;
   padding: 10px;
   border-radius: 4px;
-  background: #e8f5e9;
+  background: #e3f2fd;
 }
 
 table.data {
@@ -215,7 +215,7 @@ table.data td {
 }
 
 table.data th {
-  background: #4caf50;
+  background: #1976d2;
   color: #fff;
 }
 

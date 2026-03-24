@@ -4,7 +4,7 @@
   const STORAGE_KEY = 'vet_demo_data_v2';
 
   const IMG_HINT =
-    'Demo estática: los datos se guardan en localStorage del navegador.';
+    '';
 
   let state = null;
   let currentUser = null;
@@ -133,11 +133,11 @@
 
     switch (view) {
       case 'admin-inicio':
-        workspace('<h2>Menú principal</h2><p class="hint">' + IMG_HINT + '</p><p>Usa la barra superior (mismo orden que <code>menu.html</code>).</p>');
+        workspace('<h2>Bienvenido/a</h2><p class="hint"></p>');
         break;
 
       case 'emp-inicio':
-        workspace('<h2>Menú empleado</h2><p class="hint">' + IMG_HINT + '</p><p>Usa la barra superior (mismo orden que <code>menu2.html</code>).</p>');
+        workspace('<h2>Bienvenido/a</h2><p class="hint"></p>');
         break;
 
       /* ——— Administrador: crear usuario ——— */
