@@ -43,13 +43,25 @@ Estos datos se guardan en **localStorage** del navegador (sin persistencia real)
 
 ### Reportes en Pantalla
 
-Los reportes ahora **muestran TODOS los registros** con búsqueda y filtrado en tiempo real:
+Los reportes ahora **muestran TODOS los registros** con búsqueda, filtrado y opciones de exportación:
 
+#### **Reporte General (Nuevo)**
+- Muestra TODOS los datos de una vez (usuarios, productos, pacientes, propietarios, citas)
+- 🖨️ Imprimir/Vista previa
+- 📥 Descargar en Excel (CSV)
+
+#### Reportes Individuales
 - **Reporte Usuarios**: Busca por nombre o correo
 - **Reporte Productos**: Busca por nombre o descripción  
 - **Reporte Pacientes**: Busca por nombre, filtra por especie (Canino/Felino)
 - **Reporte Propietarios**: Busca por nombre, teléfono o correo
 - **Reporte Citas**: Busca por motivo, filtra por rango de fechas
+
+**Cada reporte incluye:**
+- 🖨️ Botón **Imprimir** (abre vista previa imprimible)
+- 📥 Botón **Descargar CSV** (exportar a Excel o similar)
+- 🔍 Búsqueda en tiempo real
+- 🎯 Filtros avanzados
 
 Acceso: **Menú Admin → Generar Reportes → Selecciona el reporte**
 
