@@ -6,16 +6,6 @@ Este proyecto funciona **sin MySQL ni hosting en la nube**: usa **PHP** y una ba
 
 - PHP **8.0+** con extension **pdo_sqlite** habilitada.
 
-## Como probar en tu PC
-
-En la raiz del proyecto:
-
-```bash
-php -S localhost:8080
-```
-
-Abre en el navegador: `http://localhost:8080/login.html` (o `index.php`).
-
 ### Usuarios de demostracion
 
 Tras la primera ejecucion se crean automaticamente:
@@ -96,3 +86,5 @@ Ese archivo corresponde a otro esquema (tablas/columnas distintas). El sistema u
 ---
 
 © 2026 Fernando — All rights reserved.
+
+*Última actualización: 23 de marzo de 2026*
