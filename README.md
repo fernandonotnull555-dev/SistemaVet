@@ -1,6 +1,6 @@
 ﻿# Sistema Veterinaria — modo local (SQLite)
 
-Este proyecto funciona **sin MySQL ni hosting en la nube**: usa **PHP** y una base **SQLite** en la carpeta `data/` (archivo `veterinaria.sqlite`), que se crea sola al usar cualquier pagina que conecte a la base.
+Este proyecto funciona **sin MySQL ni hosting en la nube**: usa **PHP** y una base **SQLite** en la carpeta `data/` (archivo `veterinaria.sqlite`), que se crea sola al usar cualquier pagina que conecte a la base con el objetivo de ser una demo ejecutable.
 
 ## Requisitos
 
@@ -37,8 +37,8 @@ Los reportes ahora **muestran TODOS los registros** con búsqueda, filtrado y op
 
 #### **Reporte General (Nuevo)**
 - Muestra TODOS los datos de una vez (usuarios, productos, pacientes, propietarios, citas)
-- 🖨️ Imprimir/Vista previa
-- 📥 Descargar en Excel (CSV)
+- Imprimir/Vista previa
+- Descargar en Excel (CSV)
 
 #### Reportes Individuales
 - **Reporte Usuarios**: Busca por nombre o correo
@@ -48,32 +48,18 @@ Los reportes ahora **muestran TODOS los registros** con búsqueda, filtrado y op
 - **Reporte Citas**: Busca por motivo, filtra por rango de fechas
 
 **Cada reporte incluye:**
-- 🖨️ Botón **Imprimir** (abre vista previa imprimible)
-- 📥 Botón **Descargar CSV** (exportar a Excel o similar)
-- 🔍 Búsqueda en tiempo real
-- 🎯 Filtros avanzados
+- Botón **Imprimir** (abre vista previa imprimible)
+- Botón **Descargar CSV** (exportar a Excel o similar)
+- Búsqueda en tiempo real
+- Filtros avanzados
 
-Acceso: **Menú Admin → Generar Reportes → Selecciona el reporte**
-
-### Activacion
-
-1. Ve al repo en GitHub: `Settings` -> `Pages`.
-2. En `Build and deployment`, selecciona:
-   - `Source`: **Deploy from a branch**
-   - `Branch`: **main**
-   - `Folder`: **/docs**
-3. Guarda y espera 1-2 minutos.
-
-La URL quedara asi:
-
-`https://fernandonotnull555-dev.github.io/SistemaVet/`
 
 > Nota: Esta demo Pages guarda datos en `localStorage` del navegador. No usa PHP/SQLite.
 
 ## GitHub y demo online completa
 
 - GitHub Pages solo sirve archivos estaticos; no ejecuta PHP.
-- Para la app completa (PHP + SQLite), usa tu PC con `php -S` o un hosting que soporte PHP.
+- Para la app completa (PHP + SQLite), usa la PC con `php -S` o un hosting que soporte PHP.
 
 ## Respaldo
 
