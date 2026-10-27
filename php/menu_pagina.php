@@ -15,9 +15,6 @@ if (!isset($_SESSION['usuario_id'])) {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('ruta/a/tu/imagen.jpg');
-            background-size: cover;
-            background-position: center;
             margin: 0;
         }
 
@@ -77,6 +74,6 @@ if (!isset($_SESSION['usuario_id'])) {
     </nav>
 
 
-    <img src="https://w0.peakpx.com/wallpaper/463/467/HD-wallpaper-pets-pet-kittten-caine-cat-pisici-animal-dog-puppy.jpg" alt="Imagen de mascotas" class="mascota-imagen">
+    <img src="../assets/mascotas.jpg" alt="Imagen de mascotas" class="mascota-imagen">
 </body>
 </html>
