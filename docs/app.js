@@ -256,7 +256,7 @@
         };
         save();
       }
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
     localStorage.removeItem('vet_demo_data_v1');
   }
 
@@ -305,7 +305,7 @@
         workspace('<h2>Bienvenido/a</h2><p class="hint"></p>');
         break;
 
-      /* ——— Administrador: crear usuario ——— */
+
       case 'admin-crear-usuario':
         workspace(
           '<h2>Crear usuario</h2><p class="hint">Equivalente a <code>insertar_usuario.html</code></p>' +
@@ -343,7 +343,7 @@
         };
         break;
 
-      /* ——— Submenú insertar (orden menu_insertarbd.html) ——— */
+
       case 'admin-submenu-insertar':
         workspace(
           '<h2>Insertar en la Base de Datos, seleccione la tabla</h2>' +
@@ -465,7 +465,7 @@
         };
         break;
 
-      /* ——— Modificar (orden modificar_bd.html) ——— */
+
       case 'admin-submenu-modificar':
         workspace(
           '<h2>Modificar Tablas</h2>' +
@@ -641,7 +641,7 @@
         };
         break;
 
-      /* ——— Buscar (orden menu_buscar.html) ——— */
+
       case 'admin-submenu-buscar':
         workspace(
           '<h2>Menú de Búsqueda</h2>' +
@@ -740,7 +740,7 @@
         };
         break;
 
-      /* ——— Eliminar ——— */
+
       case 'admin-submenu-eliminar':
         workspace(
           '<h2>Eliminar Registros</h2>' +
@@ -770,7 +770,7 @@
         };
         break;
 
-      /* ——— Reportes (orden menu_reportes.html) ——— */
+
       case 'admin-submenu-reportes':
         workspace(
           '<h2>Generar Reportes</h2>' +
@@ -1079,7 +1079,7 @@
         };
         break;
 
-      /* ——— Empleado (pantallas equivalentes a empleado_*.html) ——— */
+
       case 'emp-buscar-cita':
         workspace(
           '<h2>Buscar cita</h2><div class="form-grid">' +

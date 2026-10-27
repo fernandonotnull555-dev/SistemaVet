@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Tabla</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6f9e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: rgba(76, 175, 80, 0.8);
+            padding: 15px 20px;
+            text-align: center;
+            color: white;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(51, 51, 51, 0.8);
+            padding: 10px;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            padding: 15px 20px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #021bfa;
+        }
+
+        h1 {
+            color: #080808;
+            margin: 20px 0;
+        }
+
+        .menu-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .menu-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            margin: 5px 0;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .menu-container button:hover {
+            background-color: #388E3C;
+        }
+
+        .regresar {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bienvenido/a a nuestra Veterinaria</h1>
+    </header>
+
+    <nav>
+        <a href="insertar_usuario.html">Crear Usuario</a>
+        <a href="menu_insertarbd.html">Insertar Registros</a>
+        <a href="modificar_bd.html">Modificar en la Base de Datos</a>
+        <a href="menu_buscar.html">Buscar Usuarios en la Base de Datos</a>
+        <a href="menu_eliminar.html">Eliminar Registros de la Base de Datos</a>
+        <a href="menu_reportes.html">Generar Reportes</a>
+        <a href="../php/logout.php">Cerrar Sesión</a>
+    </nav>
+
+
+    <h1>Insertar en la Base de Datos, seleccione la tabla</h1>
+
+    <div class="menu-container">
+        <button onclick="window.location.href='insertar_cita.html'">Citas</button>
+        <button onclick="window.location.href='insertar_paciente.html'">Pacientes</button>
+        <button onclick="window.location.href='insertar_propietario.html'">Propietarios</button>
+        <button onclick="window.location.href='insertar_producto.html'">Productos</button>
+
+        <button class="regresar" onclick="window.location.href='../php/menu_pagina.php'">Regresar al menú</button>
+    </div>
+</body>
+</html>

@@ -6,6 +6,17 @@ Este proyecto funciona **sin MySQL ni hosting en la nube**: usa **PHP** y una ba
 
 - PHP **8.0+** con extension **pdo_sqlite** habilitada.
 
+## Estructura del proyecto
+
+- `php/`: paginas y endpoints PHP.
+- `html/`: formularios y paginas HTML estaticas.
+- `includes/`: funciones compartidas de PHP.
+- `database/`: respaldo SQL.
+- `assets/`: imagenes y otros recursos.
+- `docs/`: demo estatica para GitHub Pages.
+
+Para iniciar la aplicacion local, ejecuta `php -S localhost:8000` desde la carpeta del proyecto y abre `http://localhost:8000/php/index.php`.
+
 ### Usuarios de demostracion
 
 Tras la primera ejecucion se crean automaticamente:
@@ -53,19 +64,20 @@ Los reportes ahora **muestran TODOS los registros** con búsqueda, filtrado y op
 - Búsqueda en tiempo real
 - Filtros avanzados
 
+Acceso: **Menú Admin → Generar Reportes → Selecciona el reporte**
 
 > Nota: Esta demo Pages guarda datos en `localStorage` del navegador. No usa PHP/SQLite.
 
 ## GitHub y demo online completa
 
 - GitHub Pages solo sirve archivos estaticos; no ejecuta PHP.
-- Para la app completa (PHP + SQLite), usa la PC con `php -S` o un hosting que soporte PHP.
+- Para la app completa (PHP + SQLite), usa tu PC con `php -S localhost:8000` o un hosting que soporte PHP.
 
 ## Respaldo
 
-`backup.php` genera una copia del archivo SQLite en la carpeta `backups/`.
+`php/backup.php` genera una copia del archivo SQLite en la carpeta `backups/`.
 
-## Nota sobre `agrovet.sql`
+## Nota sobre `database/agrovet.sql`
 
 Ese archivo corresponde a otro esquema (tablas/columnas distintas). El sistema usa el esquema definido en `includes/db.php`, alineado con los `.php` del proyecto.
 

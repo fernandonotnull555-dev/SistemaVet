@@ -1,4 +1,4 @@
-/* Demo GitHub Pages — estilo alineado a menu.html / menu2.html */
+
 :root {
   font-family: Arial, sans-serif;
 }
@@ -16,7 +16,7 @@ body {
   display: none !important;
 }
 
-/* Login */
+
 #loginCard {
   max-width: 420px;
   margin: 40px auto;
@@ -62,7 +62,7 @@ body {
   line-height: 1.5;
 }
 
-/* Shell (post-login) */
+
 #shell {
   flex: 1;
   display: flex;
@@ -88,7 +88,7 @@ body {
   margin-top: 6px;
 }
 
-/* Barra de menú como los originales */
+
 .demo-nav {
   display: flex;
   flex-wrap: wrap;
@@ -112,7 +112,7 @@ body {
   background-color: #021bfa;
 }
 
-/* Contenido */
+
 #workspace {
   flex: 1;
   padding: 20px 16px 24px;
@@ -219,7 +219,7 @@ table.data th {
   color: #fff;
 }
 
-/* Imagen al pie (como menu.html / menu2.html) */
+
 .mascota-imagen {
   display: block;
   margin: 20px auto 24px;

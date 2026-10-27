@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Selección</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('ruta/a/tu/imagen.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+        }
+
+        header {
+            background-color: rgba(76, 175, 80, 0.8);
+            padding: 15px 20px;
+            text-align: center;
+            color: white;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(51, 51, 51, 0.8);
+            padding: 10px;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            padding: 15px 20px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #021bfa;
+        }
+
+        h1 {
+            color: #0e0f0e;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .menu {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .menu button {
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .menu button:hover {
+            background-color: #388E3C;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bienvenido/a a nuestra Veterinaria</h1>
+    </header>
+
+    <nav>
+        <a href="insertar_usuario.html">Crear Usuario</a>
+        <a href="menu_insertarbd.html">Insertar Registros</a>
+        <a href="modificar_bd.html">Modificar en la Base de Datos</a>
+        <a href="menu_buscar.html">Buscar Usuarios en la Base de Datos</a>
+        <a href="menu_eliminar.html">Eliminar Registros de la Base de Datos</a>
+        <a href="menu_reportes.html">Generar Reportes</a>
+        <a href="../php/logout.php">Cerrar Sesión</a>
+    </nav>
+
+    <h1>Reportes en pantalla</h1>
+
+    <div class="menu">
+        <button onclick="window.location.href='rep_usu_pant.html'">Reporte Usuarios</button>
+        <button onclick="window.location.href='rep_prod_pant.html'">Reporte Productos</button>
+        <button onclick="window.location.href='rep_cita.html'">Reporte Cita</button>
+        <button onclick="window.location.href='rep_pac.html'">Reporte Pacientes</button>
+        <button onclick="window.location.href='rep_prop_pant.html'">Reporte Propietarios</button>
+
+        <button onclick="window.location.href='menu_reportes.html'">Regresar al menú</button>
+    </div>
+
+</body>
+</html>

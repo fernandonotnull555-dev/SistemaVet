@@ -1,26 +1,21 @@
 <?php
-/**
- * Base de datos local SQLite (sin MySQL ni hosting en la nube).
- * El archivo se crea automáticamente en data/veterinaria.sqlite la primera vez.
- */
+
 
 declare(strict_types=1);
 
-/** Ruta absoluta al archivo SQLite */
+
 function vet_db_path(): string
 {
     return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'veterinaria.sqlite';
 }
 
-/** Mismo algoritmo que antes en MySQL: SHA2(?, 256) */
+
 function vet_password_hash(string $plain): string
 {
     return hash('sha256', $plain);
 }
 
-/**
- * @return PDO Conexión singleton a SQLite
- */
+
 function vet_get_pdo(): PDO
 {
     static $pdo = null;
@@ -106,8 +101,6 @@ CREATE TABLE IF NOT EXISTS empleados (
     comision REAL NOT NULL DEFAULT 0
 );
 SQL);
-
-    // Datos de demostración (solo si no hay usuarios)
     $n = (int) $pdo->query('SELECT COUNT(*) FROM usuarios')->fetchColumn();
     if ($n === 0) {
         $hash = vet_password_hash('admin123');
