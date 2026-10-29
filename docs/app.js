@@ -3,8 +3,7 @@
 
   const STORAGE_KEY = 'vet_demo_data_v3';
 
-  const IMG_HINT =
-    '';
+  const IMG_HINT = '';
 
   let state = null;
   let currentUser = null;
@@ -298,17 +297,16 @@
 
     switch (view) {
       case 'admin-inicio':
-        workspace('<h2>Bienvenido/a</h2><p class="hint"></p>');
+        workspace('<h2>Bienvenido/a</h2>');
         break;
 
       case 'emp-inicio':
-        workspace('<h2>Bienvenido/a</h2><p class="hint"></p>');
+        workspace('<h2>Bienvenido/a</h2>');
         break;
-
 
       case 'admin-crear-usuario':
         workspace(
-          '<h2>Crear usuario</h2><p class="hint">Equivalente a <code>insertar_usuario.html</code></p>' +
+          '<h2>Crear usuario</h2>' +
             '<div class="form-grid">' +
             '<label>Nombre completo<input id="f_nu_nombre" /></label>' +
             '<label>Correo<input id="f_nu_correo" type="email" /></label>' +
@@ -343,7 +341,6 @@
         };
         break;
 
-
       case 'admin-submenu-insertar':
         workspace(
           '<h2>Insertar en la Base de Datos, seleccione la tabla</h2>' +
@@ -359,7 +356,7 @@
 
       case 'admin-insertar-cita':
         workspace(
-          '<h2>Insertar cita</h2><p class="hint"><code>insertar_cita.html</code></p>' +
+          '<h2>Insertar cita</h2>' +
             '<div class="form-grid">' +
             '<label>ID paciente<input id="f_ic_p" type="number" /></label>' +
             '<label>Fecha cita<input id="f_ic_f" /></label>' +
@@ -381,7 +378,7 @@
 
       case 'admin-insertar-paciente':
         workspace(
-          '<h2>Insertar paciente</h2><p class="hint"><code>insertar_paciente.html</code></p>' +
+          '<h2>Insertar paciente</h2>' +
             '<div class="form-grid">' +
             '<label>ID propietario<input id="f_ip_prop" type="number" /></label>' +
             '<label>Nombre<input id="f_ip_n" /></label>' +
@@ -416,7 +413,7 @@
 
       case 'admin-insertar-propietario':
         workspace(
-          '<h2>Insertar propietario</h2><p class="hint"><code>insertar_propietario.html</code></p>' +
+          '<h2>Insertar propietario</h2>' +
             '<div class="form-grid">' +
             '<label>ID paciente (referencia)<input id="f_ipp_pac" type="number" /></label>' +
             '<label>Nombre completo<input id="f_ipp_n" /></label>' +
@@ -440,105 +437,131 @@
 
       case 'admin-insertar-producto':
         workspace(
-          '<h2>Insertar producto</h2><p class="hint"><code>insertar_producto.html</code></p>' +
+          '<h2>Insertar producto</h2>' +
             '<div class="form-grid">' +
-            '<label>Nombre<input id="f_ipr_n" /></label>' +
-            '<label>Descripción<input id="f_ipr_d" /></label>' +
-            '<label>Precio<input id="f_ipr_pr" type="number" step="0.01" /></label>' +
-            '<label>Existencia<input id="f_ipr_c" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_ipr">Insertar</button><div id="msg_ipr"></div></div>' +
+            '<label>Nombre<input id="f_idp_n" /></label>' +
+            '<label>Descripción<input id="f_idp_d" /></label>' +
+            '<label>Precio<input id="f_idp_pr" type="number" step="0.01" /></label>' +
+            '<label>Cantidad en existencia<input id="f_idp_c" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_idp">Insertar</button><div id="msg_idp"></div></div>' +
             backBtnAdmin()
         );
-        $('btn_ipr').onclick = () => {
-          const nombre = $('f_ipr_n').value.trim();
-          if (!nombre) return;
+        $('btn_idp').onclick = () => {
+          const nombre = $('f_idp_n').value.trim();
+          const descripcion = $('f_idp_d').value.trim();
+          const precio = Number($('f_idp_pr').value);
+          const cantidad = Number($('f_idp_c').value);
+          if (!nombre || isNaN(precio) || isNaN(cantidad)) return ($('msg_idp').innerHTML = '<div class="msg">Completa los campos correctamente.</div>');
           const id = nextId(state.productos, 'id');
-          state.productos.push({
-            id,
-            nombre,
-            descripcion: $('f_ipr_d').value.trim(),
-            precio: Number($('f_ipr_pr').value || 0),
-            cantidad_exist: Number($('f_ipr_c').value || 0),
-          });
+          state.productos.push({ id, nombre, descripcion, precio, cantidad_exist: cantidad });
           save();
-          $('msg_ipr').innerHTML = '<div class="msg">Producto insertado. ID: ' + id + '</div>';
+          $('msg_idp').innerHTML = '<div class="msg">Producto insertado. ID: ' + id + '</div>';
         };
         break;
 
-
       case 'admin-submenu-modificar':
         workspace(
-          '<h2>Modificar Tablas</h2>' +
+          '<h2>Modificar en la Base de Datos, seleccione la tabla</h2>' +
             '<div class="stack-btns">' +
-            '<button type="button" data-go="admin-mod-cita">Modificar Citas</button>' +
-            '<button type="button" data-go="admin-mod-paciente">Modificar Pacientes</button>' +
-            '<button type="button" data-go="admin-mod-propietario">Modificar Propietarios</button>' +
-            '<button type="button" data-go="admin-mod-producto">Modificar Productos</button>' +
-            '<button type="button" data-go="admin-mod-usuario">Modificar Usuarios</button>' +
+            '<button type="button" data-go="admin-mod-usuario">Usuarios</button>' +
+            '<button type="button" data-go="admin-mod-cita">Citas</button>' +
+            '<button type="button" data-go="admin-mod-paciente">Pacientes</button>' +
+            '<button type="button" data-go="admin-mod-propietario">Propietarios</button>' +
+            '<button type="button" data-go="admin-mod-producto">Productos</button>' +
             '<button type="button" class="secondary" data-go="admin-inicio">Regresar al menú</button>' +
             '</div>'
         );
         break;
 
-      case 'admin-mod-cita':
+      case 'admin-mod-usuario':
         workspace(
-          '<h2>Modificar cita</h2><p class="hint"><code>modificar_citas.html</code></p>' +
+          '<h2>Modificar usuario</h2>' +
             '<div class="form-grid">' +
-            '<label>ID cita<input id="m_c_id" type="number" /></label>' +
-            '<label>ID paciente<input id="m_c_p" type="number" /></label>' +
-            '<label>Fecha<input id="m_c_f" /></label>' +
-            '<label>Motivo<input id="m_c_m" /></label>' +
-            '<button type="button" class="action" id="btn_mc">Actualizar</button><div id="msg_mc"></div></div>' +
+            '<label>ID usuario a modificar<input id="f_mu_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_mu_load">Cargar</button>' +
+            '<div id="f_mu_form"></div><div id="msg_mu"></div></div>' +
             backBtnAdmin()
         );
-        $('btn_mc').onclick = () => {
-          const id = Number($('m_c_id').value);
+        $('btn_mu_load').onclick = () => {
+          const id = Number($('f_mu_id').value);
+          const u = state.users.find((x) => x.id_usuario === id);
+          if (!u) return ($('msg_mu').innerHTML = '<div class="msg">Usuario no encontrado.</div>');
+          $('f_mu_form').innerHTML =
+            '<label>Nombre completo<input id="f_mu_n" value="' + escapeHtml(u.nombre_completo) + '" /></label>' +
+            '<label>Correo<input id="f_mu_co" type="email" value="' + escapeHtml(u.correo_electronico) + '" /></label>' +
+            '<label>Contraseña<input id="f_mu_pa" type="password" value="' + escapeHtml(u.pass) + '" /></label>' +
+            '<label>Rol<select id="f_mu_ro"><option ' + (u.rol_usuario === 'Administrador' ? 'selected' : '') + '>Administrador</option><option ' + (u.rol_usuario === 'Empleado' ? 'selected' : '') + '>Empleado</option></select></label>' +
+            '<button type="button" class="action" id="btn_mu_save">Guardar cambios</button>';
+          $('btn_mu_save').onclick = () => {
+            u.nombre_completo = $('f_mu_n').value.trim();
+            u.correo_electronico = $('f_mu_co').value.trim();
+            u.pass = $('f_mu_pa').value;
+            u.rol_usuario = $('f_mu_ro').value;
+            save();
+            $('msg_mu').innerHTML = '<div class="msg">Usuario modificado correctamente.</div>';
+          };
+        };
+        break;
+
+      case 'admin-mod-cita':
+        workspace(
+          '<h2>Modificar cita</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID cita<input id="f_mc_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_mc_l">Cargar</button>' +
+            '<div id="f_mc_f"></div><div id="msg_mc"></div></div>' +
+            backBtnAdmin()
+        );
+        $('btn_mc_l').onclick = () => {
+          const id = Number($('f_mc_id').value);
           const c = state.citas.find((x) => x.id_cita === id);
           if (!c) return ($('msg_mc').innerHTML = '<div class="msg">Cita no encontrada.</div>');
-          c.id_paciente = Number($('m_c_p').value);
-          c.fecha_cita = $('m_c_f').value.trim();
-          c.motivo = $('m_c_m').value.trim();
-          save();
-          $('msg_mc').innerHTML = '<div class="msg">Actualizado.</div>';
+          $('f_mc_f').innerHTML =
+            '<label>ID paciente<input id="f_mc_p" type="number" value="' + c.id_paciente + '" /></label>' +
+            '<label>Fecha cita<input id="f_mc_fe" value="' + escapeHtml(c.fecha_cita) + '" /></label>' +
+            '<label>Motivo<input id="f_mc_mo" value="' + escapeHtml(c.motivo) + '" /></label>' +
+            '<button type="button" class="action" id="btn_mc_s">Guardar</button>';
+          $('btn_mc_s').onclick = () => {
+            c.id_paciente = Number($('f_mc_p').value);
+            c.fecha_cita = $('f_mc_fe').value.trim();
+            c.motivo = $('f_mc_mo').value.trim();
+            save();
+            $('msg_mc').innerHTML = '<div class="msg">Cita actualizada.</div>';
+          };
         };
         break;
 
       case 'admin-mod-paciente':
         workspace(
-          '<h2>Modificar paciente</h2><p class="hint"><code>modificar_paciente.php</code></p>' +
+          '<h2>Modificar paciente</h2>' +
             '<div class="form-grid">' +
-            '<label>ID paciente<input id="m_p_id" type="number" /></label>' +
-            '<label>ID propietario<input id="m_p_prop" type="number" /></label>' +
-            '<label>Nombre<input id="m_p_n" /></label>' +
-            '<label>Especie<input id="m_p_e" /></label>' +
-            '<label>Sexo<input id="m_p_s" /></label>' +
-            '<label>Peso<input id="m_p_pe" /></label>' +
-            '<label>Edad<input id="m_p_ed" /></label>' +
-            '<button type="button" class="action" id="btn_mp">Cargar / Actualizar</button><div id="msg_mp"></div></div>' +
+            '<label>ID paciente<input id="f_mp_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_mp_l">Cargar</button>' +
+            '<div id="f_mp_f"></div><div id="msg_mp"></div></div>' +
             backBtnAdmin()
         );
-        $('btn_mp').onclick = () => {
-          const id = Number($('m_p_id').value);
+        $('btn_mp_l').onclick = () => {
+          const id = Number($('f_mp_id').value);
           const p = state.pacientes.find((x) => x.id_paciente === id);
           if (!p) return ($('msg_mp').innerHTML = '<div class="msg">Paciente no encontrado.</div>');
-          if (!$('m_p_n').value) {
-            $('m_p_prop').value = p.id_prop;
-            $('m_p_n').value = p.Nombre;
-            $('m_p_e').value = p.Especie;
-            $('m_p_s').value = p.Sexo;
-            $('m_p_pe').value = p.Peso;
-            $('m_p_ed').value = p.Edad;
-            $('msg_mp').innerHTML = '<div class="msg">Datos cargados. Edita y vuelve a pulsar para guardar.</div>';
-            return;
-          }
-          p.id_prop = Number($('m_p_prop').value);
-          p.Nombre = $('m_p_n').value.trim();
-          p.Especie = $('m_p_e').value.trim();
-          p.Sexo = $('m_p_s').value.trim();
-          p.Peso = $('m_p_pe').value.trim();
-          p.Edad = $('m_p_ed').value.trim();
-          save();
-          $('msg_mp').innerHTML = '<div class="msg">Guardado.</div>';
+          $('f_mp_f').innerHTML =
+            '<label>ID propietario<input id="f_mp_pr" type="number" value="' + p.id_prop + '" /></label>' +
+            '<label>Nombre<input id="f_mp_no" value="' + escapeHtml(p.Nombre) + '" /></label>' +
+            '<label>Especie<input id="f_mp_es" value="' + escapeHtml(p.Especie) + '" /></label>' +
+            '<label>Sexo<input id="f_mp_se" value="' + escapeHtml(p.Sexo) + '" /></label>' +
+            '<label>Peso<input id="f_mp_pe" value="' + escapeHtml(p.Peso) + '" /></label>' +
+            '<label>Edad<input id="f_mp_ed" value="' + escapeHtml(p.Edad) + '" /></label>' +
+            '<button type="button" class="action" id="btn_mp_s">Guardar</button>';
+          $('btn_mp_s').onclick = () => {
+            p.id_prop = Number($('f_mp_pr').value);
+            p.Nombre = $('f_mp_no').value.trim();
+            p.Especie = $('f_mp_es').value.trim();
+            p.Sexo = $('f_mp_se').value.trim();
+            p.Peso = $('f_mp_pe').value.trim();
+            p.Edad = $('f_mp_ed').value.trim();
+            save();
+            $('msg_mp').innerHTML = '<div class="msg">Paciente actualizado.</div>';
+          };
         };
         break;
 
@@ -546,32 +569,29 @@
         workspace(
           '<h2>Modificar propietario</h2>' +
             '<div class="form-grid">' +
-            '<label>ID propietario<input id="m_pr_id" type="number" /></label>' +
-            '<label>ID paciente ref.<input id="m_pr_pac" type="number" /></label>' +
-            '<label>Nombre completo<input id="m_pr_n" /></label>' +
-            '<label>Teléfono<input id="m_pr_t" /></label>' +
-            '<label>Correo<input id="m_pr_c" /></label>' +
-            '<button type="button" class="action" id="btn_mpr">Cargar / Actualizar</button><div id="msg_mpr"></div></div>' +
+            '<label>ID propietario<input id="f_mpr_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_mpr_l">Cargar</button>' +
+            '<div id="f_mpr_f"></div><div id="msg_mpr"></div></div>' +
             backBtnAdmin()
         );
-        $('btn_mpr').onclick = () => {
-          const id = Number($('m_pr_id').value);
-          const p = state.propietarios.find((x) => x.id_prop === id);
-          if (!p) return ($('msg_mpr').innerHTML = '<div class="msg">No encontrado.</div>');
-          if (!$('m_pr_n').value) {
-            $('m_pr_pac').value = p.id_paciente;
-            $('m_pr_n').value = p.Nombre_Completo;
-            $('m_pr_t').value = p.telefono;
-            $('m_pr_c').value = p.correo_electronico;
-            $('msg_mpr').innerHTML = '<div class="msg">Cargado. Edita y guarda.</div>';
-            return;
-          }
-          p.id_paciente = Number($('m_pr_pac').value || 0);
-          p.Nombre_Completo = $('m_pr_n').value.trim();
-          p.telefono = $('m_pr_t').value.trim();
-          p.correo_electronico = $('m_pr_c').value.trim();
-          save();
-          $('msg_mpr').innerHTML = '<div class="msg">Guardado.</div>';
+        $('btn_mpr_l').onclick = () => {
+          const id = Number($('f_mpr_id').value);
+          const pr = state.propietarios.find((x) => x.id_prop === id);
+          if (!pr) return ($('msg_mpr').innerHTML = '<div class="msg">Propietario no encontrado.</div>');
+          $('f_mpr_f').innerHTML =
+            '<label>ID paciente ref<input id="f_mpr_ip" type="number" value="' + pr.id_paciente + '" /></label>' +
+            '<label>Nombre completo<input id="f_mpr_n" value="' + escapeHtml(pr.Nombre_Completo) + '" /></label>' +
+            '<label>Teléfono<input id="f_mpr_t" value="' + escapeHtml(pr.telefono) + '" /></label>' +
+            '<label>Correo<input id="f_mpr_c" type="email" value="' + escapeHtml(pr.correo_electronico) + '" /></label>' +
+            '<button type="button" class="action" id="btn_mpr_s">Guardar</button>';
+          $('btn_mpr_s').onclick = () => {
+            pr.id_paciente = Number($('f_mpr_ip').value);
+            pr.Nombre_Completo = $('f_mpr_n').value.trim();
+            pr.telefono = $('f_mpr_t').value.trim();
+            pr.correo_electronico = $('f_mpr_c').value.trim();
+            save();
+            $('msg_mpr').innerHTML = '<div class="msg">Propietario actualizado.</div>';
+          };
         };
         break;
 
@@ -579,577 +599,341 @@
         workspace(
           '<h2>Modificar producto</h2>' +
             '<div class="form-grid">' +
-            '<label>ID producto<input id="m_prod_id" type="number" /></label>' +
-            '<label>Nombre<input id="m_prod_n" /></label>' +
-            '<label>Descripción<input id="m_prod_d" /></label>' +
-            '<label>Precio<input id="m_prod_p" type="number" step="0.01" /></label>' +
-            '<label>Existencia<input id="m_prod_c" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_mprod">Cargar / Actualizar</button><div id="msg_mprod"></div></div>' +
+            '<label>ID producto<input id="f_mprod_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_mprod_l">Cargar</button>' +
+            '<div id="f_mprod_f"></div><div id="msg_mprod"></div></div>' +
             backBtnAdmin()
         );
-        $('btn_mprod').onclick = () => {
-          const id = Number($('m_prod_id').value);
-          const p = state.productos.find((x) => x.id === id);
-          if (!p) return ($('msg_mprod').innerHTML = '<div class="msg">No encontrado.</div>');
-          if (!$('m_prod_n').value) {
-            $('m_prod_n').value = p.nombre;
-            $('m_prod_d').value = p.descripcion;
-            $('m_prod_p').value = p.precio;
-            $('m_prod_c').value = p.cantidad_exist;
-            $('msg_mprod').innerHTML = '<div class="msg">Cargado.</div>';
-            return;
-          }
-          p.nombre = $('m_prod_n').value.trim();
-          p.descripcion = $('m_prod_d').value.trim();
-          p.precio = Number($('m_prod_p').value || 0);
-          p.cantidad_exist = Number($('m_prod_c').value || 0);
-          save();
-          $('msg_mprod').innerHTML = '<div class="msg">Guardado.</div>';
+        $('btn_mprod_l').onclick = () => {
+          const id = Number($('f_mprod_id').value);
+          const pr = state.productos.find((x) => x.id === id);
+          if (!pr) return ($('msg_mprod').innerHTML = '<div class="msg">Producto no encontrado.</div>');
+          $('f_mprod_f').innerHTML =
+            '<label>Nombre<input id="f_mprod_n" value="' + escapeHtml(pr.nombre) + '" /></label>' +
+            '<label>Descripción<input id="f_mprod_d" value="' + escapeHtml(pr.descripcion) + '" /></label>' +
+            '<label>Precio<input id="f_mprod_pr" type="number" step="0.01" value="' + pr.precio + '" /></label>' +
+            '<label>Cantidad<input id="f_mprod_c" type="number" value="' + pr.cantidad_exist + '" /></label>' +
+            '<button type="button" class="action" id="btn_mprod_s">Guardar</button>';
+          $('btn_mprod_s').onclick = () => {
+            pr.nombre = $('f_mprod_n').value.trim();
+            pr.descripcion = $('f_mprod_d').value.trim();
+            pr.precio = Number($('f_mprod_pr').value);
+            pr.cantidad_exist = Number($('f_mprod_c').value);
+            save();
+            $('msg_mprod').innerHTML = '<div class="msg">Producto actualizado.</div>';
+          };
         };
         break;
-
-      case 'admin-mod-usuario':
-        workspace(
-          '<h2>Modificar usuario</h2>' +
-            '<div class="form-grid">' +
-            '<label>ID usuario<input id="m_u_id" type="number" /></label>' +
-            '<label>Nombre completo<input id="m_u_n" /></label>' +
-            '<label>Correo<input id="m_u_c" type="email" /></label>' +
-            '<label>Nueva contraseña<input id="m_u_p" type="password" /></label>' +
-            '<label>Rol<select id="m_u_r"><option>Administrador</option><option>Empleado</option></select></label>' +
-            '<button type="button" class="action" id="btn_mu">Cargar / Actualizar</button><div id="msg_mu"></div></div>' +
-            backBtnAdmin()
-        );
-        $('btn_mu').onclick = () => {
-          const id = Number($('m_u_id').value);
-          const u = state.users.find((x) => x.id_usuario === id);
-          if (!u) return ($('msg_mu').innerHTML = '<div class="msg">No encontrado.</div>');
-          if (!$('m_u_n').value) {
-            $('m_u_n').value = u.nombre_completo;
-            $('m_u_c').value = u.correo_electronico;
-            $('m_u_r').value = u.rol_usuario;
-            $('msg_mu').innerHTML = '<div class="msg">Cargado.</div>';
-            return;
-          }
-          u.nombre_completo = $('m_u_n').value.trim();
-          u.correo_electronico = $('m_u_c').value.trim();
-          const np = $('m_u_p').value;
-          if (np) u.pass = np;
-          u.rol_usuario = $('m_u_r').value;
-          save();
-          $('msg_mu').innerHTML = '<div class="msg">Guardado.</div>';
-        };
-        break;
-
 
       case 'admin-submenu-buscar':
         workspace(
-          '<h2>Menú de Búsqueda</h2>' +
+          '<h2>Buscar en la Base de Datos, seleccione la tabla</h2>' +
             '<div class="stack-btns">' +
-            '<button type="button" data-go="admin-buscar-usuarios">Buscar Usuarios</button>' +
-            '<button type="button" data-go="admin-buscar-productos">Buscar Productos</button>' +
-            '<button type="button" data-go="admin-buscar-cita">Buscar Cita</button>' +
-            '<button type="button" data-go="admin-buscar-pacientes">Buscar Pacientes</button>' +
-            '<button type="button" data-go="admin-buscar-propietario">Buscar Propietarios</button>' +
+            '<button type="button" data-go="admin-bus-usuarios">Usuarios</button>' +
+            '<button type="button" data-go="admin-bus-citas">Citas</button>' +
+            '<button type="button" data-go="admin-bus-pacientes">Pacientes</button>' +
+            '<button type="button" data-go="admin-bus-propietarios">Propietarios</button>' +
+            '<button type="button" data-go="admin-bus-productos">Productos</button>' +
             '<button type="button" class="secondary" data-go="admin-inicio">Regresar al menú</button>' +
             '</div>'
         );
         break;
 
-      case 'admin-buscar-usuarios':
+      case 'admin-bus-usuarios':
         workspace(
-          '<h2>Buscar usuarios</h2><div class="form-grid"><label>ID usuario<input id="b_u" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_bu">Buscar</button></div><div id="out_bu"></div>' +
+          '<h2>Buscar usuarios</h2>' +
+            '<div class="form-grid">' +
+            '<label>Filtrar por nombre o correo<input id="f_bu_q" /></label>' +
+            '<button type="button" class="action" id="btn_bu">Buscar</button></div>' +
+            '<div id="res_bu"></div>' +
             backBtnAdmin()
         );
         $('btn_bu').onclick = () => {
-          const id = Number($('b_u').value);
-          const rows = state.users.filter((u) => u.id_usuario === id).map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]);
-          $('out_bu').innerHTML = tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], rows);
+          const q = $('f_bu_q').value.toLowerCase().trim();
+          const filtered = state.users.filter((u) => u.nombre_completo.toLowerCase().includes(q) || u.correo_electronico.toLowerCase().includes(q));
+          const rows = filtered.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]);
+          $('res_bu').innerHTML = tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], rows);
         };
         break;
 
-      case 'admin-buscar-productos':
+      case 'admin-bus-citas':
         workspace(
-          '<h2>Buscar productos</h2><div class="form-grid"><label>ID<input id="b_pr" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_bpr">Buscar</button></div><div id="out_bpr"></div>' +
-            backBtnAdmin()
-        );
-        $('btn_bpr').onclick = () => {
-          const id = Number($('b_pr').value);
-          const rows = state.productos.filter((p) => p.id === id).map((p) => [p.id, p.nombre, p.descripcion, p.precio, p.cantidad_exist]);
-          $('out_bpr').innerHTML = tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], rows);
-        };
-        break;
-
-      case 'admin-buscar-cita':
-        workspace(
-          '<h2>Buscar cita</h2><div class="form-grid">' +
-            '<label>ID cita<input id="b_c_id" type="number" /></label>' +
-            '<label>ID paciente<input id="b_c_p" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_bc">Buscar</button></div><div id="out_bc"></div>' +
+          '<h2>Buscar citas</h2>' +
+            '<div class="form-grid">' +
+            '<label>Motivo o fecha<input id="f_bc_q" /></label>' +
+            '<button type="button" class="action" id="btn_bc">Buscar</button></div>' +
+            '<div id="res_bc"></div>' +
             backBtnAdmin()
         );
         $('btn_bc').onclick = () => {
-          const idc = Number($('b_c_id').value || 0);
-          const idp = Number($('b_c_p').value || 0);
-          let list = state.citas;
-          if (idc) list = list.filter((c) => c.id_cita === idc);
-          else if (idp) list = list.filter((c) => c.id_paciente === idp);
-          else {
-            $('out_bc').innerHTML = '<div class="msg">Indica ID cita o ID paciente.</div>';
-            return;
-          }
-          const rows = list.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]);
-          $('out_bc').innerHTML = tableHtml(['ID cita', 'ID paciente', 'Fecha', 'Motivo'], rows);
+          const q = $('f_bc_q').value.toLowerCase().trim();
+          const filtered = state.citas.filter((c) => c.motivo.toLowerCase().includes(q) || c.fecha_cita.toLowerCase().includes(q));
+          const rows = filtered.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]);
+          $('res_bc').innerHTML = tableHtml(['ID Cita', 'ID Paciente', 'Fecha', 'Motivo'], rows);
         };
         break;
 
-      case 'admin-buscar-pacientes':
+      case 'admin-bus-pacientes':
         workspace(
-          '<h2>Buscar pacientes</h2><div class="form-grid">' +
-            '<label>ID paciente<input id="b_pa_id" type="number" /></label>' +
-            '<label>ID propietario<input id="b_pa_prop" type="number" /></label>' +
-            '<label>Nombre (contiene)<input id="b_pa_n" /></label>' +
-            '<button type="button" class="action" id="btn_bpa">Buscar</button></div><div id="out_bpa"></div>' +
+          '<h2>Buscar pacientes</h2>' +
+            '<div class="form-grid">' +
+            '<label>Nombre o especie<input id="f_bp_q" /></label>' +
+            '<button type="button" class="action" id="btn_bp">Buscar</button></div>' +
+            '<div id="res_bp"></div>' +
             backBtnAdmin()
         );
-        $('btn_bpa').onclick = () => {
-          const id = Number($('b_pa_id').value || 0);
-          const idp = Number($('b_pa_prop').value || 0);
-          const n = $('b_pa_n').value.trim().toLowerCase();
-          let list = state.pacientes;
-          if (id) list = list.filter((p) => p.id_paciente === id);
-          if (idp) list = list.filter((p) => p.id_prop === idp);
-          if (n) list = list.filter((p) => (p.Nombre || '').toLowerCase().includes(n));
-          const rows = list.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]);
-          $('out_bpa').innerHTML = tableHtml(['ID pac.', 'ID prop.', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], rows);
+        $('btn_bp').onclick = () => {
+          const q = $('f_bp_q').value.toLowerCase().trim();
+          const filtered = state.pacientes.filter((p) => p.Nombre.toLowerCase().includes(q) || p.Especie.toLowerCase().includes(q));
+          const rows = filtered.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]);
+          $('res_bp').innerHTML = tableHtml(['ID Paciente', 'ID Propietario', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], rows);
         };
         break;
 
-      case 'admin-buscar-propietario':
+      case 'admin-bus-propietarios':
         workspace(
-          '<h2>Buscar propietarios</h2><div class="form-grid"><label>ID propietario<input id="b_prop" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_bprop">Buscar</button></div><div id="out_bprop"></div>' +
+          '<h2>Buscar propietarios</h2>' +
+            '<div class="form-grid">' +
+            '<label>Nombre o teléfono<input id="f_bpr_q" /></label>' +
+            '<button type="button" class="action" id="btn_bpr">Buscar</button></div>' +
+            '<div id="res_bpr"></div>' +
             backBtnAdmin()
         );
-        $('btn_bprop').onclick = () => {
-          const id = Number($('b_prop').value);
-          const rows = state.propietarios.filter((p) => p.id_prop === id).map((p) => [p.id_prop, p.id_paciente, p.Nombre_Completo, p.telefono, p.correo_electronico]);
-          $('out_bprop').innerHTML = tableHtml(['ID', 'ID pac. ref', 'Nombre', 'Tel', 'Correo'], rows);
+        $('btn_bpr').onclick = () => {
+          const q = $('f_bpr_q').value.toLowerCase().trim();
+          const filtered = state.propietarios.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(q) || pr.telefono.toLowerCase().includes(q));
+          const rows = filtered.map((pr) => [pr.id_prop, pr.id_paciente, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]);
+          $('res_bpr').innerHTML = tableHtml(['ID Prop', 'ID Paciente Ref', 'Nombre', 'Teléfono', 'Correo'], rows);
         };
         break;
 
+      case 'admin-bus-productos':
+        workspace(
+          '<h2>Buscar productos</h2>' +
+            '<div class="form-grid">' +
+            '<label>Nombre o descripción<input id="f_bprod_q" /></label>' +
+            '<button type="button" class="action" id="btn_bprod">Buscar</button></div>' +
+            '<div id="res_bprod"></div>' +
+            backBtnAdmin()
+        );
+        $('btn_bprod').onclick = () => {
+          const q = $('f_bprod_q').value.toLowerCase().trim();
+          const filtered = state.productos.filter((p) => p.nombre.toLowerCase().includes(q) || p.descripcion.toLowerCase().includes(q));
+          const rows = filtered.map((p) => [p.id, p.nombre, p.descripcion, '$' + p.precio.toFixed(2), p.cantidad_exist]);
+          $('res_bprod').innerHTML = tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Existencia'], rows);
+        };
+        break;
 
       case 'admin-submenu-eliminar':
         workspace(
-          '<h2>Eliminar Registros</h2>' +
+          '<h2>Eliminar registros de la Base de Datos, seleccione la tabla</h2>' +
             '<div class="stack-btns">' +
-            '<button type="button" data-go="admin-eliminar-cita">Eliminar Citas</button>' +
+            '<button type="button" data-go="admin-del-usuario">Usuarios</button>' +
+            '<button type="button" data-go="admin-del-cita">Citas</button>' +
+            '<button type="button" data-go="admin-del-paciente">Pacientes</button>' +
+            '<button type="button" data-go="admin-del-propietario">Propietarios</button>' +
+            '<button type="button" data-go="admin-del-producto">Productos</button>' +
             '<button type="button" class="secondary" data-go="admin-inicio">Regresar al menú</button>' +
             '</div>'
         );
         break;
 
-      case 'admin-eliminar-cita':
+      case 'admin-del-usuario':
         workspace(
-          '<h2>Eliminar cita</h2><div class="form-grid"><label>ID cita<input id="e_c" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_ec">Eliminar</button></div><div id="msg_ec"></div>' +
+          '<h2>Eliminar usuario</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID usuario a eliminar<input id="f_du_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_du">Eliminar</button><div id="msg_du"></div></div>' +
             backBtnAdmin()
         );
-        $('btn_ec').onclick = () => {
-          const id = Number($('e_c').value);
-          const idx = state.citas.findIndex((c) => c.id_cita === id);
-          if (idx < 0) return ($('msg_ec').innerHTML = '<div class="msg">No encontrada.</div>');
-          state.pacientes.forEach((p) => {
-            if (p.id_cita === id) p.id_cita = null;
-          });
-          state.citas.splice(idx, 1);
+        $('btn_du').onclick = () => {
+          const id = Number($('f_du_id').value);
+          const idx = state.users.findIndex((u) => u.id_usuario === id);
+          if (idx === -1) return ($('msg_du').innerHTML = '<div class="msg">Usuario no encontrado.</div>');
+          if (state.users[idx].correo_electronico === 'admin@demo.local') return ($('msg_du').innerHTML = '<div class="msg">No se puede eliminar al admin principal.</div>');
+          state.users.splice(idx, 1);
           save();
-          $('msg_ec').innerHTML = '<div class="msg">Eliminada.</div>';
+          $('msg_du').innerHTML = '<div class="msg">Usuario eliminado.</div>';
         };
         break;
 
+      case 'admin-del-cita':
+        workspace(
+          '<h2>Eliminar cita</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID cita a eliminar<input id="f_dc_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_dc">Eliminar</button><div id="msg_dc"></div></div>' +
+            backBtnAdmin()
+        );
+        $('btn_dc').onclick = () => {
+          const id = Number($('f_dc_id').value);
+          const idx = state.citas.findIndex((c) => c.id_cita === id);
+          if (idx === -1) return ($('msg_dc').innerHTML = '<div class="msg">Cita no encontrada.</div>');
+          state.citas.splice(idx, 1);
+          save();
+          $('msg_dc').innerHTML = '<div class="msg">Cita eliminada.</div>';
+        };
+        break;
+
+      case 'admin-del-paciente':
+        workspace(
+          '<h2>Eliminar paciente</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID paciente a eliminar<input id="f_dp_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_dp">Eliminar</button><div id="msg_dp"></div></div>' +
+            backBtnAdmin()
+        );
+        $('btn_dp').onclick = () => {
+          const id = Number($('f_dp_id').value);
+          const idx = state.pacientes.findIndex((p) => p.id_paciente === id);
+          if (idx === -1) return ($('msg_dp').innerHTML = '<div class="msg">Paciente no encontrado.</div>');
+          state.pacientes.splice(idx, 1);
+          save();
+          $('msg_dp').innerHTML = '<div class="msg">Paciente eliminado.</div>';
+        };
+        break;
+
+      case 'admin-del-propietario':
+        workspace(
+          '<h2>Eliminar propietario</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID propietario a eliminar<input id="f_dpr_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_dpr">Eliminar</button><div id="msg_dpr"></div></div>' +
+            backBtnAdmin()
+        );
+        $('btn_dpr').onclick = () => {
+          const id = Number($('f_dpr_id').value);
+          const idx = state.propietarios.findIndex((pr) => pr.id_prop === id);
+          if (idx === -1) return ($('msg_dpr').innerHTML = '<div class="msg">Propietario no encontrado.</div>');
+          state.propietarios.splice(idx, 1);
+          save();
+          $('msg_dpr').innerHTML = '<div class="msg">Propietario eliminado.</div>';
+        };
+        break;
+
+      case 'admin-del-producto':
+        workspace(
+          '<h2>Eliminar producto</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID producto a eliminar<input id="f_dprod_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_dprod">Eliminar</button><div id="msg_dprod"></div></div>' +
+            backBtnAdmin()
+        );
+        $('btn_dprod').onclick = () => {
+          const id = Number($('f_dprod_id').value);
+          const idx = state.productos.findIndex((pr) => pr.id === id);
+          if (idx === -1) return ($('msg_dprod').innerHTML = '<div class="msg">Producto no encontrado.</div>');
+          state.productos.splice(idx, 1);
+          save();
+          $('msg_dprod').innerHTML = '<div class="msg">Producto eliminado.</div>';
+        };
+        break;
 
       case 'admin-submenu-reportes':
         workspace(
           '<h2>Generar Reportes</h2>' +
             '<div class="stack-btns">' +
-            '<button type="button" data-go="rep-general" style="background:#0d47a1;font-weight:bold;">📊 REPORTE GENERAL (Todos los datos)</button>' +
-            '<button type="button" data-go="rep-usuarios">Reporte Usuarios</button>' +
-            '<button type="button" data-go="rep-productos">Reporte Productos</button>' +
-            '<button type="button" data-go="rep-pacientes">Reporte Pacientes</button>' +
-            '<button type="button" data-go="rep-propietarios">Reporte Propietarios</button>' +
-            '<button type="button" data-go="rep-citas">Reporte Citas</button>' +
-            '<button type="button" id="rep_back">Descargar Respaldo JSON</button>' +
+            '<button type="button" data-go="rep-usuarios">Reporte de Usuarios</button>' +
+            '<button type="button" data-go="rep-citas">Reporte de Citas</button>' +
+            '<button type="button" data-go="rep-pacientes">Reporte de Pacientes</button>' +
+            '<button type="button" data-go="rep-productos">Reporte de Inventario / Productos</button>' +
             '<button type="button" class="secondary" data-go="admin-inicio">Regresar al menú</button>' +
             '</div>'
         );
-        $('rep_back').onclick = () => {
-          const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'respaldo_demo_veterinaria.json';
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
         break;
 
-      case 'rep-general':
-        const genCSV = (name, headers, rows) => {
-          let csv = headers.join(',') + '\n';
-          rows.forEach(r => csv += r.map(c => (String(c).includes(',') ? '"' + c + '"' : c)).join(',') + '\n');
-          return csv;
-        };
-        const printReport = (title, html) => {
-          const w = window.open('', '', 'width=900,height=600');
-          w.document.write('<html><head><title>' + title + '</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
-          w.document.close();
-          w.print();
-        };
-        const downloadCSV = (filename, csv) => {
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = filename;
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
-        let genHtml = '<h2>📊 REPORTE GENERAL - ' + new Date().toLocaleDateString() + '</h2>';
-        genHtml += '<h3>Usuarios (' + state.users.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], state.users.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
-        genHtml += '<h3>Productos (' + state.productos.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Precio', 'Cantidad'], state.productos.map((p) => [p.id, p.nombre, '$' + p.precio.toFixed(2), p.cantidad_exist]));
-        genHtml += '<h3>Pacientes (' + state.pacientes.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Especie', 'Propietario'], state.pacientes.map((p) => [p.id_paciente, p.Nombre, p.Especie, p.id_prop]));
-        genHtml += '<h3>Propietarios (' + state.propietarios.length + ' registros)</h3>' + tableHtml(['ID', 'Nombre', 'Teléfono', 'Correo'], state.propietarios.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]));
-        genHtml += '<h3>Citas (' + state.citas.length + ' registros)</h3>' + tableHtml(['ID', 'Paciente', 'Fecha', 'Motivo'], state.citas.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]));
-        workspace(
-          '<h2>📊 Reporte General Completo</h2>' +
-            '<div class="stack-btns">' +
-            '<button type="button" class="action" id="btn_gen_print">🖨️ Imprimir/Vista Previa</button>' +
-            '<button type="button" class="action" id="btn_gen_csv">📥 Descargar Excel (CSV)</button>' +
-            '<button type="button" class="secondary" data-go="admin-submenu-reportes">Volver a reportes</button>' +
-            '</div>' +
-            '<div id="rep_gen_out" style="margin-top:20px;"></div>'
-        );
-        $('rep_gen_out').innerHTML = genHtml;
-        $('btn_gen_print').onclick = () => printReport('Reporte General', genHtml);
-        $('btn_gen_csv').onclick = () => {
-          let allCSV = '';
-          allCSV += 'USUARIOS\n' + genCSV('Usuarios', ['ID', 'Nombre', 'Correo', 'Rol'], state.users.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario])) + '\n\n';
-          allCSV += 'PRODUCTOS\n' + genCSV('Productos', ['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], state.productos.map((p) => [p.id, p.nombre, p.descripcion, p.precio, p.cantidad_exist])) + '\n\n';
-          allCSV += 'PACIENTES\n' + genCSV('Pacientes', ['ID', 'Nombre', 'Especie', 'Propietario'], state.pacientes.map((p) => [p.id_paciente, p.Nombre, p.Especie, p.id_prop])) + '\n\n';
-          allCSV += 'PROPIETARIOS\n' + genCSV('Propietarios', ['ID', 'Nombre', 'Teléfono', 'Correo'], state.propietarios.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico])) + '\n\n';
-          allCSV += 'CITAS\n' + genCSV('Citas', ['ID', 'ID Paciente', 'Fecha', 'Motivo'], state.citas.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]));
-          downloadCSV('Reporte_General_' + new Date().toISOString().split('T')[0] + '.csv', allCSV);
-        };
+      case 'rep-usuarios': {
+        const rows = state.users.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]);
+        workspace('<h2>Reporte de Usuarios</h2>' + tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], rows) + backBtnAdmin());
         break;
-
-      case 'rep-usuarios':
-        workspace(
-          '<h2>Reporte: Usuarios (' + state.users.length + ' registros)</h2>' +
-            '<div class="form-grid"><label>Buscar por nombre o correo<input id="rep_u_search" type="text" placeholder="Ej: admin, demo@" /></label></div>' +
-            '<div class="stack-btns">' +
-            '<button type="button" class="action" id="btn_u_print">🖨️ Imprimir</button>' +
-            '<button type="button" class="action" id="btn_u_csv">📥 Descargar CSV</button>' +
-            '</div>' +
-            '<div id="rep_u_out"></div>' +
-            backBtnAdmin()
-        );
-        const renderUsers = () => {
-          const term = ($('rep_u_search').value || '').toLowerCase();
-          let list = state.users;
-          if (term) list = list.filter((u) => u.nombre_completo.toLowerCase().includes(term) || u.correo_electronico.toLowerCase().includes(term));
-          $('rep_u_out').innerHTML = tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], list.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
-        };
-        renderUsers();
-        $('rep_u_search').oninput = renderUsers;
-        $('btn_u_print').onclick = () => {
-          const term = ($('rep_u_search').value || '').toLowerCase();
-          let list = state.users;
-          if (term) list = list.filter((u) => u.nombre_completo.toLowerCase().includes(term) || u.correo_electronico.toLowerCase().includes(term));
-          const html = '<h2>Reporte Usuarios</h2>' + tableHtml(['ID', 'Nombre', 'Correo', 'Rol'], list.map((u) => [u.id_usuario, u.nombre_completo, u.correo_electronico, u.rol_usuario]));
-          const w = window.open('', '', 'width=900,height=600');
-          w.document.write('<html><head><title>Reporte Usuarios</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
-          w.document.close();
-          w.print();
-        };
-        $('btn_u_csv').onclick = () => {
-          const term = ($('rep_u_search').value || '').toLowerCase();
-          let list = state.users;
-          if (term) list = list.filter((u) => u.nombre_completo.toLowerCase().includes(term) || u.correo_electronico.toLowerCase().includes(term));
-          let csv = 'ID,Nombre,Correo,Rol\n';
-          list.forEach(u => csv += u.id_usuario + ',' + u.nombre_completo + ',' + u.correo_electronico + ',' + u.rol_usuario + '\n');
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'Usuarios_' + new Date().toISOString().split('T')[0] + '.csv';
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
+      }
+      case 'rep-citas': {
+        const rows = state.citas.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]);
+        workspace('<h2>Reporte de Citas</h2>' + tableHtml(['ID Cita', 'ID Paciente', 'Fecha', 'Motivo'], rows) + backBtnAdmin());
         break;
-
-      case 'rep-productos':
-        workspace(
-          '<h2>Reporte: Productos (' + state.productos.length + ' registros)</h2>' +
-            '<div class="form-grid"><label>Buscar por nombre o descripción<input id="rep_p_search" type="text" placeholder="Ej: alimento, vitamina" /></label></div>' +
-            '<div class="stack-btns">' +
-            '<button type="button" class="action" id="btn_p_print">🖨️ Imprimir</button>' +
-            '<button type="button" class="action" id="btn_p_csv">📥 Descargar CSV</button>' +
-            '</div>' +
-            '<div id="rep_p_out"></div>' +
-            backBtnAdmin()
-        );
-        const renderProds = () => {
-          const term = ($('rep_p_search').value || '').toLowerCase();
-          let list = state.productos;
-          if (term) list = list.filter((p) => p.nombre.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term));
-          $('rep_p_out').innerHTML = tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], list.map((p) => [p.id, p.nombre, p.descripcion, '$' + p.precio.toFixed(2), p.cantidad_exist]));
-        };
-        renderProds();
-        $('rep_p_search').oninput = renderProds;
-        $('btn_p_print').onclick = () => {
-          const term = ($('rep_p_search').value || '').toLowerCase();
-          let list = state.productos;
-          if (term) list = list.filter((p) => p.nombre.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term));
-          const html = '<h2>Reporte Productos</h2>' + tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Cantidad'], list.map((p) => [p.id, p.nombre, p.descripcion, '$' + p.precio.toFixed(2), p.cantidad_exist]));
-          const w = window.open('', '', 'width=900,height=600');
-          w.document.write('<html><head><title>Reporte Productos</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
-          w.document.close();
-          w.print();
-        };
-        $('btn_p_csv').onclick = () => {
-          const term = ($('rep_p_search').value || '').toLowerCase();
-          let list = state.productos;
-          if (term) list = list.filter((p) => p.nombre.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term));
-          let csv = 'ID,Nombre,Descripción,Precio,Cantidad\n';
-          list.forEach(p => csv += p.id + ',' + p.nombre + ',' + p.descripcion + ',' + p.precio + ',' + p.cantidad_exist + '\n');
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'Productos_' + new Date().toISOString().split('T')[0] + '.csv';
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
+      }
+      case 'rep-pacientes': {
+        const rows = state.pacientes.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]);
+        workspace('<h2>Reporte de Pacientes</h2>' + tableHtml(['ID', 'Prop ID', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], rows) + backBtnAdmin());
         break;
-
-      case 'rep-pacientes':
-        workspace(
-          '<h2>Reporte: Pacientes (' + state.pacientes.length + ' registros)</h2>' +
-            '<div class="form-grid"><label>Buscar por nombre<input id="rep_pa_search" type="text" placeholder="Ej: Max, Luna" /></label>' +
-            '<label>Filtrar por especie<select id="rep_pa_especie"><option value="">-- Todas --</option><option>Canino</option><option>Felino</option></select></label></div>' +
-            '<div class="stack-btns">' +
-            '<button type="button" class="action" id="btn_pa_print">🖨️ Imprimir</button>' +
-            '<button type="button" class="action" id="btn_pa_csv">📥 Descargar CSV</button>' +
-            '</div>' +
-            '<div id="rep_pa_out"></div>' +
-            backBtnAdmin()
-        );
-        const renderPacs = () => {
-          const term = ($('rep_pa_search').value || '').toLowerCase();
-          const especie = $('rep_pa_especie').value;
-          let list = state.pacientes;
-          if (term) list = list.filter((p) => p.Nombre.toLowerCase().includes(term));
-          if (especie) list = list.filter((p) => p.Especie === especie);
-          $('rep_pa_out').innerHTML = tableHtml(['ID', 'Prop', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], list.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]));
-        };
-        renderPacs();
-        $('rep_pa_search').oninput = renderPacs;
-        $('rep_pa_especie').onchange = renderPacs;
-        $('btn_pa_print').onclick = () => {
-          const term = ($('rep_pa_search').value || '').toLowerCase();
-          const especie = $('rep_pa_especie').value;
-          let list = state.pacientes;
-          if (term) list = list.filter((p) => p.Nombre.toLowerCase().includes(term));
-          if (especie) list = list.filter((p) => p.Especie === especie);
-          const html = '<h2>Reporte Pacientes</h2>' + tableHtml(['ID', 'Prop', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], list.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]));
-          const w = window.open('', '', 'width=900,height=600');
-          w.document.write('<html><head><title>Reporte Pacientes</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
-          w.document.close();
-          w.print();
-        };
-        $('btn_pa_csv').onclick = () => {
-          const term = ($('rep_pa_search').value || '').toLowerCase();
-          const especie = $('rep_pa_especie').value;
-          let list = state.pacientes;
-          if (term) list = list.filter((p) => p.Nombre.toLowerCase().includes(term));
-          if (especie) list = list.filter((p) => p.Especie === especie);
-          let csv = 'ID,ID_Prop,Nombre,Especie,Sexo,Peso,Edad\n';
-          list.forEach(p => csv += p.id_paciente + ',' + p.id_prop + ',' + p.Nombre + ',' + p.Especie + ',' + p.Sexo + ',' + p.Peso + ',' + p.Edad + '\n');
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'Pacientes_' + new Date().toISOString().split('T')[0] + '.csv';
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
+      }
+      case 'rep-productos': {
+        const rows = state.productos.map((pr) => [pr.id, pr.nombre, pr.descripcion, '$' + pr.precio.toFixed(2), pr.cantidad_exist]);
+        workspace('<h2>Reporte de Productos</h2>' + tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Existencia'], rows) + backBtnAdmin());
         break;
-
-      case 'rep-propietarios':
-        workspace(
-          '<h2>Reporte: Propietarios (' + state.propietarios.length + ' registros)</h2>' +
-            '<div class="form-grid"><label>Buscar por nombre o teléfono<input id="rep_pr_search" type="text" placeholder="Ej: Juan, 8888" /></label></div>' +
-            '<div class="stack-btns">' +
-            '<button type="button" class="action" id="btn_pr_print">🖨️ Imprimir</button>' +
-            '<button type="button" class="action" id="btn_pr_csv">📥 Descargar CSV</button>' +
-            '</div>' +
-            '<div id="rep_pr_out"></div>' +
-            backBtnAdmin()
-        );
-        const renderProps = () => {
-          const term = ($('rep_pr_search').value || '').toLowerCase();
-          let list = state.propietarios;
-          if (term) list = list.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(term) || pr.telefono.includes(term) || pr.correo_electronico.toLowerCase().includes(term));
-          $('rep_pr_out').innerHTML = tableHtml(['ID Prop', 'Nombre', 'Teléfono', 'Correo'], list.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]));
-        };
-        renderProps();
-        $('rep_pr_search').oninput = renderProps;
-        $('btn_pr_print').onclick = () => {
-          const term = ($('rep_pr_search').value || '').toLowerCase();
-          let list = state.propietarios;
-          if (term) list = list.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(term) || pr.telefono.includes(term) || pr.correo_electronico.toLowerCase().includes(term));
-          const html = '<h2>Reporte Propietarios</h2>' + tableHtml(['ID Prop', 'Nombre', 'Teléfono', 'Correo'], list.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]));
-          const w = window.open('', '', 'width=900,height=600');
-          w.document.write('<html><head><title>Reporte Propietarios</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
-          w.document.close();
-          w.print();
-        };
-        $('btn_pr_csv').onclick = () => {
-          const term = ($('rep_pr_search').value || '').toLowerCase();
-          let list = state.propietarios;
-          if (term) list = list.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(term) || pr.telefono.includes(term) || pr.correo_electronico.toLowerCase().includes(term));
-          let csv = 'ID,Nombre,Teléfono,Correo\n';
-          list.forEach(pr => csv += pr.id_prop + ',' + pr.Nombre_Completo + ',' + pr.telefono + ',' + pr.correo_electronico + '\n');
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'Propietarios_' + new Date().toISOString().split('T')[0] + '.csv';
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
-        break;
-
-      case 'rep-citas':
-        workspace(
-          '<h2>Reporte: Citas (' + state.citas.length + ' registros)</h2>' +
-            '<div class="form-grid"><label>Buscar por motivo<input id="rep_c_search" type="text" placeholder="Ej: Vacunación, Castración" /></label>' +
-            '<label>Filtrar por fecha (desde)<input id="rep_c_fecha" type="date" /></label></div>' +
-            '<div class="stack-btns">' +
-            '<button type="button" class="action" id="btn_c_print">🖨️ Imprimir</button>' +
-            '<button type="button" class="action" id="btn_c_csv">📥 Descargar CSV</button>' +
-            '</div>' +
-            '<div id="rep_c_out"></div>' +
-            backBtnAdmin()
-        );
-        const renderCitas = () => {
-          const term = ($('rep_c_search').value || '').toLowerCase();
-          const fecha = ($('rep_c_fecha').value || '');
-          let list = state.citas;
-          if (term) list = list.filter((ct) => ct.motivo.toLowerCase().includes(term));
-          if (fecha) list = list.filter((ct) => ct.fecha_cita.startsWith(fecha));
-          $('rep_c_out').innerHTML = tableHtml(['ID', 'ID Paciente', 'Fecha', 'Motivo'], list.map((ct) => [ct.id_cita, ct.id_paciente, ct.fecha_cita, ct.motivo]));
-        };
-        renderCitas();
-        $('rep_c_search').oninput = renderCitas;
-        $('rep_c_fecha').onchange = renderCitas;
-        $('btn_c_print').onclick = () => {
-          const term = ($('rep_c_search').value || '').toLowerCase();
-          const fecha = ($('rep_c_fecha').value || '');
-          let list = state.citas;
-          if (term) list = list.filter((ct) => ct.motivo.toLowerCase().includes(term));
-          if (fecha) list = list.filter((ct) => ct.fecha_cita.startsWith(fecha));
-          const html = '<h2>Reporte Citas</h2>' + tableHtml(['ID', 'ID Paciente', 'Fecha', 'Motivo'], list.map((ct) => [ct.id_cita, ct.id_paciente, ct.fecha_cita, ct.motivo]));
-          const w = window.open('', '', 'width=900,height=600');
-          w.document.write('<html><head><title>Reporte Citas</title><style>body{font-family:Arial;margin:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#1976d2;color:white}h2{color:#1976d2}</style></head><body>' + html + '</body></html>');
-          w.document.close();
-          w.print();
-        };
-        $('btn_c_csv').onclick = () => {
-          const term = ($('rep_c_search').value || '').toLowerCase();
-          const fecha = ($('rep_c_fecha').value || '');
-          let list = state.citas;
-          if (term) list = list.filter((ct) => ct.motivo.toLowerCase().includes(term));
-          if (fecha) list = list.filter((ct) => ct.fecha_cita.startsWith(fecha));
-          let csv = 'ID,ID_Paciente,Fecha,Motivo\n';
-          list.forEach(ct => csv += ct.id_cita + ',' + ct.id_paciente + ',' + ct.fecha_cita + ',' + ct.motivo + '\n');
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'Citas_' + new Date().toISOString().split('T')[0] + '.csv';
-          a.click();
-          URL.revokeObjectURL(a.href);
-        };
-        break;
-
+      }
 
       case 'emp-buscar-cita':
         workspace(
-          '<h2>Buscar cita</h2><div class="form-grid">' +
-            '<label>ID cita<input id="eb_c_id" type="number" /></label>' +
-            '<label>ID paciente<input id="eb_c_p" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_ebc">Buscar</button></div><div id="out_ebc"></div>' +
+          '<h2>Buscar cita</h2>' +
+            '<div class="form-grid">' +
+            '<label>Motivo o fecha<input id="f_ebc_q" /></label>' +
+            '<button type="button" class="action" id="btn_ebc">Buscar</button></div>' +
+            '<div id="res_ebc"></div>' +
             backBtnEmp()
         );
         $('btn_ebc').onclick = () => {
-          const idc = Number($('eb_c_id').value || 0);
-          const idp = Number($('eb_c_p').value || 0);
-          let list = state.citas;
-          if (idc) list = list.filter((c) => c.id_cita === idc);
-          else if (idp) list = list.filter((c) => c.id_paciente === idp);
-          else return ($('out_ebc').innerHTML = '<div class="msg">Indica ID cita o paciente.</div>');
-          $('out_ebc').innerHTML = tableHtml(['ID cita', 'ID paciente', 'Fecha', 'Motivo'], list.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]));
+          const q = $('f_ebc_q').value.toLowerCase().trim();
+          const filtered = state.citas.filter((c) => c.motivo.toLowerCase().includes(q) || c.fecha_cita.toLowerCase().includes(q));
+          const rows = filtered.map((c) => [c.id_cita, c.id_paciente, c.fecha_cita, c.motivo]);
+          $('res_ebc').innerHTML = tableHtml(['ID Cita', 'ID Paciente', 'Fecha', 'Motivo'], rows);
         };
         break;
 
       case 'emp-buscar-pacientes':
         workspace(
-          '<h2>Buscar pacientes</h2><div class="form-grid">' +
-            '<label>ID paciente<input id="eb_pa_id" type="number" /></label>' +
-            '<label>ID cita<input id="eb_pa_c" type="number" /></label>' +
-            '<label>ID propietario<input id="eb_pa_prop" type="number" /></label>' +
-            '<button type="button" class="action" id="eb_pa_go">Buscar</button></div><div id="out_ebpa"></div>' +
+          '<h2>Buscar Paciente</h2>' +
+            '<div class="form-grid">' +
+            '<label>Nombre o especie<input id="f_ebp_q" /></label>' +
+            '<button type="button" class="action" id="btn_ebp">Buscar</button></div>' +
+            '<div id="res_ebp"></div>' +
             backBtnEmp()
         );
-        $('eb_pa_go').onclick = () => {
-          let list = state.pacientes;
-          const id = Number($('eb_pa_id').value || 0);
-          const ic = Number($('eb_pa_c').value || 0);
-          const ip = Number($('eb_pa_prop').value || 0);
-          if (id) list = list.filter((p) => p.id_paciente === id);
-          if (ic) list = list.filter((p) => p.id_cita === ic);
-          if (ip) list = list.filter((p) => p.id_prop === ip);
-          $('out_ebpa').innerHTML = tableHtml(['ID', 'ID prop', 'ID cita', 'Nombre', 'Especie'], list.map((p) => [p.id_paciente, p.id_prop, p.id_cita || '', p.Nombre, p.Especie]));
+        $('btn_ebp').onclick = () => {
+          const q = $('f_ebp_q').value.toLowerCase().trim();
+          const filtered = state.pacientes.filter((p) => p.Nombre.toLowerCase().includes(q) || p.Especie.toLowerCase().includes(q));
+          const rows = filtered.map((p) => [p.id_paciente, p.id_prop, p.Nombre, p.Especie, p.Sexo, p.Peso, p.Edad]);
+          $('res_ebp').innerHTML = tableHtml(['ID', 'Prop ID', 'Nombre', 'Especie', 'Sexo', 'Peso', 'Edad'], rows);
         };
         break;
 
       case 'emp-buscar-propietarios':
         workspace(
-          '<h2>Buscar propietarios</h2><div class="form-grid"><label>ID paciente<input id="eb_pr_p" type="number" /></label>' +
-            '<button type="button" class="action" id="eb_pr_go">Buscar</button></div><div id="out_ebpr"></div>' +
+          '<h2>Buscar Propietarios</h2>' +
+            '<div class="form-grid">' +
+            '<label>Nombre o teléfono<input id="f_ebpr_q" /></label>' +
+            '<button type="button" class="action" id="btn_ebpr">Buscar</button></div>' +
+            '<div id="res_ebpr"></div>' +
             backBtnEmp()
         );
-        $('eb_pr_go').onclick = () => {
-          const idp = Number($('eb_pr_p').value || 0);
-          if (!idp) return ($('out_ebpr').innerHTML = '<div class="msg">Indica ID paciente.</div>');
-          const rows = state.propietarios.filter((p) => p.id_paciente === idp).map((p) => [p.id_prop, p.id_paciente, p.Nombre_Completo, p.telefono, p.correo_electronico]);
-          $('out_ebpr').innerHTML = tableHtml(['ID prop', 'ID pac', 'Nombre', 'Tel', 'Correo'], rows);
+        $('btn_ebpr').onclick = () => {
+          const q = $('f_ebpr_q').value.toLowerCase().trim();
+          const filtered = state.propietarios.filter((pr) => pr.Nombre_Completo.toLowerCase().includes(q) || pr.telefono.toLowerCase().includes(q));
+          const rows = filtered.map((pr) => [pr.id_prop, pr.Nombre_Completo, pr.telefono, pr.correo_electronico]);
+          $('res_ebpr').innerHTML = tableHtml(['ID Prop', 'Nombre', 'Teléfono', 'Correo'], rows);
         };
         break;
 
       case 'emp-buscar-productos':
         workspace(
-          '<h2>Buscar productos</h2><div class="form-grid"><label>ID<input id="eb_prod" type="number" /></label>' +
-            '<button type="button" class="action" id="eb_prod_go">Buscar</button></div><div id="out_ebprod"></div>' +
+          '<h2>Buscar Productos</h2>' +
+            '<div class="form-grid">' +
+            '<label>Nombre o descripción<input id="f_ebprod_q" /></label>' +
+            '<button type="button" class="action" id="btn_ebprod">Buscar</button></div>' +
+            '<div id="res_ebprod"></div>' +
             backBtnEmp()
         );
-        $('eb_prod_go').onclick = () => {
-          const id = Number($('eb_prod').value);
-          const rows = state.productos.filter((p) => p.id === id).map((p) => [p.id, p.nombre, p.descripcion, p.precio, p.cantidad_exist]);
-          $('out_ebprod').innerHTML = tableHtml(['ID', 'Nombre', 'Desc', 'Precio', 'Cant'], rows);
+        $('btn_ebprod').onclick = () => {
+          const q = $('f_ebprod_q').value.toLowerCase().trim();
+          const filtered = state.productos.filter((p) => p.nombre.toLowerCase().includes(q) || p.descripcion.toLowerCase().includes(q));
+          const rows = filtered.map((p) => [p.id, p.nombre, p.descripcion, '$' + p.precio.toFixed(2), p.cantidad_exist]);
+          $('res_ebprod').innerHTML = tableHtml(['ID', 'Nombre', 'Descripción', 'Precio', 'Existencia'], rows);
         };
         break;
 
       case 'emp-insertar-cita':
         workspace(
-          '<h2>Insertar citas</h2><p class="hint"><code>empleado_insertar_cita.html</code></p>' +
+          '<h2>Insertar citas</h2>' +
             '<div class="form-grid">' +
             '<label>ID paciente<input id="f_eic_p" type="number" /></label>' +
             '<label>Fecha cita<input id="f_eic_f" /></label>' +
@@ -1165,137 +949,134 @@
           const id = nextId(state.citas, 'id_cita');
           state.citas.push({ id_cita: id, id_paciente, fecha_cita: fecha, motivo });
           save();
-          $('msg_eic').innerHTML = '<div class="msg">Cita insertada.</div>';
+          $('msg_eic').innerHTML = '<div class="msg">Cita insertada ID: ' + id + '</div>';
         };
         break;
 
       case 'emp-insertar-paciente':
         workspace(
-          '<h2>Insertar paciente (con cita)</h2><p class="hint"><code>empleado_insertar_paciente.html</code></p>' +
+          '<h2>Insertar Pacientes</h2>' +
             '<div class="form-grid">' +
-            '<label>ID propietario<input id="eip_prop" type="number" /></label>' +
-            '<label>Nombre<input id="eip_n" /></label>' +
-            '<label>Especie<input id="eip_e" /></label>' +
-            '<label>Sexo<input id="eip_s" /></label>' +
-            '<label>Peso<input id="eip_p" /></label>' +
-            '<label>Edad<input id="eip_ed" /></label>' +
-            '<label>ID cita (debe existir)<input id="eip_c" type="number" /></label>' +
+            '<label>ID propietario<input id="f_eip_prop" type="number" /></label>' +
+            '<label>Nombre<input id="f_eip_n" /></label>' +
+            '<label>Especie<input id="f_eip_e" /></label>' +
+            '<label>Sexo<input id="f_eip_s" /></label>' +
+            '<label>Peso<input id="f_eip_p" /></label>' +
+            '<label>Edad<input id="f_eip_ed" /></label>' +
             '<button type="button" class="action" id="btn_eip">Insertar</button><div id="msg_eip"></div></div>' +
             backBtnEmp()
         );
         $('btn_eip').onclick = () => {
-          const id_cita = Number($('eip_c').value);
-          if (!state.citas.some((c) => c.id_cita === id_cita)) return ($('msg_eip').innerHTML = '<div class="msg">La cita no existe.</div>');
-          const id_prop = Number($('eip_prop').value);
-          const Nombre = $('eip_n').value.trim();
-          if (!id_prop || !Nombre) return ($('msg_eip').innerHTML = '<div class="msg">Completa propietario y nombre.</div>');
-          const dup = state.pacientes.some((p) => p.Nombre === Nombre && p.id_prop === id_prop);
-          if (dup) return ($('msg_eip').innerHTML = '<div class="msg">Duplicado.</div>');
+          const id_prop = Number($('f_eip_prop').value);
+          const Nombre = $('f_eip_n').value.trim();
+          if (!id_prop || !Nombre) return ($('msg_eip').innerHTML = '<div class="msg">ID propietario y nombre son obligatorios.</div>');
           const id = nextId(state.pacientes, 'id_paciente');
           state.pacientes.push({
             id_paciente: id,
             id_prop,
             Nombre,
-            Especie: $('eip_e').value.trim(),
-            Sexo: $('eip_s').value.trim(),
-            Peso: $('eip_p').value.trim(),
-            Edad: $('eip_ed').value.trim(),
-            id_cita,
+            Especie: $('f_eip_e').value.trim(),
+            Sexo: $('f_eip_s').value.trim(),
+            Peso: $('f_eip_p').value.trim(),
+            Edad: $('f_eip_ed').value.trim(),
+            id_cita: null,
           });
           save();
-          $('msg_eip').innerHTML = '<div class="msg">Insertado. ID paciente: ' + id + '</div>';
+          $('msg_eip').innerHTML = '<div class="msg">Paciente insertado ID: ' + id + '</div>';
         };
         break;
 
       case 'emp-insertar-propietario':
         workspace(
-          '<h2>Insertar propietario</h2><p class="hint"><code>empleado_insertar_propietarios.html</code></p>' +
+          '<h2>Insertar propietario</h2>' +
             '<div class="form-grid">' +
-            '<label>ID paciente ref.<input id="eipp_p" type="number" /></label>' +
-            '<label>Nombre completo<input id="eipp_n" /></label>' +
-            '<label>Teléfono<input id="eipp_t" /></label>' +
-            '<label>Correo<input id="eipp_c" type="email" /></label>' +
+            '<label>ID paciente ref.<input id="f_eipp_pac" type="number" /></label>' +
+            '<label>Nombre completo<input id="f_eipp_n" /></label>' +
+            '<label>Teléfono<input id="f_eipp_t" /></label>' +
+            '<label>Correo<input id="f_eipp_c" type="email" /></label>' +
             '<button type="button" class="action" id="btn_eipp">Insertar</button><div id="msg_eipp"></div></div>' +
             backBtnEmp()
         );
         $('btn_eipp').onclick = () => {
-          const id_paciente = Number($('eipp_p').value || 0);
-          const Nombre_Completo = $('eipp_n').value.trim();
-          const telefono = $('eipp_t').value.trim();
-          const correo = $('eipp_c').value.trim();
+          const id_paciente = Number($('f_eipp_pac').value || 0);
+          const Nombre_Completo = $('f_eipp_n').value.trim();
+          const telefono = $('f_eipp_t').value.trim();
+          const correo = $('f_eipp_c').value.trim();
           if (!Nombre_Completo || !telefono || !correo) return ($('msg_eipp').innerHTML = '<div class="msg">Completa los campos.</div>');
           const id_prop = nextId(state.propietarios, 'id_prop');
           state.propietarios.push({ id_prop, id_paciente, Nombre_Completo, telefono, correo_electronico: correo });
           save();
-          $('msg_eipp').innerHTML = '<div class="msg">Insertado. ID: ' + id_prop + '</div>';
+          $('msg_eipp').innerHTML = '<div class="msg">Propietario insertado ID: ' + id_prop + '</div>';
         };
         break;
 
       case 'emp-eliminar-cita':
         workspace(
-          '<h2>Eliminar citas</h2><div class="form-grid"><label>ID cita<input id="ee_c" type="number" /></label>' +
-            '<button type="button" class="action" id="btn_eec">Eliminar</button></div><div id="msg_eec"></div>' +
+          '<h2>Eliminar citas</h2>' +
+            '<div class="form-grid">' +
+            '<label>ID cita a eliminar<input id="f_edc_id" type="number" /></label>' +
+            '<button type="button" class="action" id="btn_edc">Eliminar</button><div id="msg_edc"></div></div>' +
             backBtnEmp()
         );
-        $('btn_eec').onclick = () => {
-          const id = Number($('ee_c').value);
+        $('btn_edc').onclick = () => {
+          const id = Number($('f_edc_id').value);
           const idx = state.citas.findIndex((c) => c.id_cita === id);
-          if (idx < 0) return ($('msg_eec').innerHTML = '<div class="msg">No encontrada.</div>');
-          state.pacientes.forEach((p) => {
-            if (p.id_cita === id) p.id_cita = null;
-          });
+          if (idx === -1) return ($('msg_edc').innerHTML = '<div class="msg">Cita no encontrada.</div>');
           state.citas.splice(idx, 1);
           save();
-          $('msg_eec').innerHTML = '<div class="msg">Eliminada.</div>';
+          $('msg_edc').innerHTML = '<div class="msg">Cita eliminada.</div>';
         };
         break;
-
-      default:
-        workspace('<p>Vista no implementada: ' + escapeHtml(view) + '</p>');
     }
 
     bindWorkspaceClicks();
   }
 
-  function onLogin(user) {
-    currentUser = user;
-    $('loginCard').classList.add('hidden');
-    $('shell').classList.remove('hidden');
-    $('rolBadge').textContent = 'Sesión: ' + user.correo_electronico + ' — ' + user.rol_usuario;
-
-    if (user.rol_usuario === 'Administrador') {
-      $('navAdmin').classList.remove('hidden');
-      $('navEmpleado').classList.add('hidden');
-      go('admin-inicio');
-    } else {
-      $('navAdmin').classList.add('hidden');
-      $('navEmpleado').classList.remove('hidden');
-      go('emp-inicio');
-    }
-  }
-
-  function init() {
-    migrateFromV1();
+  function initApp() {
     state = loadState();
-    save();
+    migrateFromV1();
 
     $('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const correo = $('correo').value.trim();
       const pass = $('contrasena').value;
-      const u = state.users.find((x) => x.correo_electronico === correo && x.pass === pass);
-      if (!u) return alert('Credenciales incorrectas');
-      onLogin(u);
+      const found = state.users.find((u) => u.correo_electronico === correo && u.pass === pass);
+      if (!found) {
+        alert('Credenciales incorrectas');
+        return;
+      }
+      currentUser = found;
+      $('loginCard').classList.add('hidden');
+      $('shell').classList.remove('hidden');
+
+      if (currentUser.rol_usuario === 'Administrador') {
+        $('rolBadge').textContent = 'Administrador';
+        $('navAdmin').classList.remove('hidden');
+        $('navEmpleado').classList.add('hidden');
+        go('admin-inicio');
+      } else {
+        $('rolBadge').textContent = 'Empleado';
+        $('navEmpleado').classList.remove('hidden');
+        $('navAdmin').classList.add('hidden');
+        go('emp-inicio');
+      }
     });
 
-    document.querySelectorAll('#navAdmin [data-go], #navEmpleado [data-go]').forEach((btn) => {
-      btn.addEventListener('click', () => go(btn.getAttribute('data-go')));
-    });
+    const doLogout = () => {
+      currentUser = null;
+      $('shell').classList.add('hidden');
+      $('loginCard').classList.remove('hidden');
+      $('correo').value = '';
+      $('contrasena').value = '';
+    };
 
-    $('logoutAdmin').onclick = () => location.reload();
-    $('logoutEmpleado').onclick = () => location.reload();
+    $('logoutAdmin').addEventListener('click', doLogout);
+    $('logoutEmpleado').addEventListener('click', doLogout);
+
+    document.querySelectorAll('[data-go]').forEach((el) => {
+      el.addEventListener('click', () => go(el.getAttribute('data-go')));
+    });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  document.addEventListener('DOMContentLoaded', initApp);
 })();
